@@ -17,7 +17,7 @@ public abstract class H2OLooTeleOp extends LinearOpMode {
         telemetryControl = new TelemetryControl(telemetry);
         driveTrain = new DriveTrain(hardwareMap, telemetryControl);
         attachmentControl = new AttachmentControl(hardwareMap, telemetryControl, gamepad1, gamepad2);
-        cameraControl = new CameraControl(hardwareMap, telemetryControl);
+//        cameraControl = new CameraControl(hardwareMap, telemetryControl);
 
         this.opModeInit();
 
@@ -25,6 +25,7 @@ public abstract class H2OLooTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             this.opModePeriodic();
+            telemetryControl.update();
         }
 
     }
