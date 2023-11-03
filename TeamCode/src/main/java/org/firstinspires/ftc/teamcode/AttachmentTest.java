@@ -12,23 +12,26 @@ public class AttachmentTest extends H2OLooTeleOp {
 
     public void opModePeriodic() {
 
-        if (gamepad1.b) {
-
-            if (!isBPressed) {
-
+//        if (gamepad1.b) {
+//
+//            if (!isBPressed) {
+//
 //                attachmentControl.droneTeleOp(true);
+//
+//            }
+//
+//            isBPressed = true;
+//
+//        } else {
+//
+//            isBPressed = false;
+//
+//        }
 
-            }
+//        attachmentControl.hangMotorManual();
+//        attachmentControl.hangServoManual();
 
-            isBPressed = true;
-
-        } else {
-
-            isBPressed = false;
-
-        }
-
-        attachmentControl.intakeManual(gamepad2.left_stick_x);
+//        attachmentControl.intakeManual(gamepad2.left_stick_x);
 
         driveTrain.teleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
