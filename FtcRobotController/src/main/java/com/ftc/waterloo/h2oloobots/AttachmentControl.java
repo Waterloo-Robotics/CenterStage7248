@@ -22,6 +22,8 @@ public class AttachmentControl {
     DcMotor intakeMotorLeft, intakeMotorRight;
     MotorControlGroup intakeGroup;
     Servo droneServo;
+    boolean lastRightBumper = false;
+    boolean lastLeftBumper = false;
 
     public AttachmentControl(HardwareMap hardwareMap, TelemetryControl telemetryControl, Gamepad gamepad1, Gamepad gamepad2) {
 
@@ -34,8 +36,9 @@ public class AttachmentControl {
         intakeMotorLeft = hardwareMap.dcMotor.get("intakeMotorLeft");
         intakeMotorRight = hardwareMap.dcMotor.get("intakeMotorRight");
         intakeMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
         intakeGroup = new MotorControlGroup(intakeMotorLeft, intakeMotorRight);
+
+        
 
     }
 
@@ -74,6 +77,48 @@ public class AttachmentControl {
 
         intakeGroup.setPower(power);
 
+    }
+
+    public void intakeTeleOp() {
+        if (gamepad1.right_bumper) {
+
+            if (!lastRightBumper && intakeGroup.getPower() < 0.35) {
+
+                intakeGroup.setPower(0.375);
+
+            } else if (!lastRightBumper) {
+
+                intakeGroup.setPower(0);
+
+            }
+
+            lastRightBumper = true;
+
+        } else {
+
+            lastRightBumper = false;
+
+        }
+
+        if (gamepad1.left_bumper) {
+
+            if (!lastLeftBumper && intakeGroup.getPower() > -0.85) {
+
+                intakeGroup.setPower(-1);
+
+            } else if (!lastLeftBumper) {
+
+                intakeGroup.setPower(0);
+
+            }
+
+            lastLeftBumper = true;
+
+        } else {
+
+            lastLeftBumper = false;
+
+        }
     }
 
 }
