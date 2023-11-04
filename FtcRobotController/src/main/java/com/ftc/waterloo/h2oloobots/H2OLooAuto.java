@@ -7,6 +7,7 @@ public abstract class H2OLooAuto extends LinearOpMode {
     public H2OLooAuto() {}
     public TelemetryControl telemetryControl;
 
+    public DriveTrain driveTrain;
     public OdometryControl odometryControl;
     public AttachmentControl attachmentControl;
 
@@ -15,9 +16,10 @@ public abstract class H2OLooAuto extends LinearOpMode {
     public void runOpMode() {
 
         telemetryControl = new TelemetryControl(telemetry);
-        odometryControl = new OdometryControl(hardwareMap, telemetryControl);
+        driveTrain = new DriveTrain(hardwareMap, telemetryControl);
+//        odometryControl = new OdometryControl(hardwareMap, telemetryControl);
         attachmentControl = new AttachmentControl(hardwareMap, telemetryControl, gamepad1, gamepad2);
-        cameraControl = new CameraControl(hardwareMap, telemetryControl);
+//        cameraControl = new CameraControl(hardwareMap, telemetryControl);
 
         this.opModeInit();
 

@@ -69,7 +69,7 @@ public class DriveTrain {
      *  |                    |
      *  O--------------------O
      */
-    double trackWidth = 1.0;
+    double trackWidth = 27.25;
     // how many inches the wheels travel in a full rotation of the robot
     double fullRotation = trackWidth * Math.PI;
 
@@ -207,7 +207,7 @@ public class DriveTrain {
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
@@ -881,6 +881,15 @@ public class DriveTrain {
         while (waitTimer.seconds() <= 0.125) {
 
         }
+
+    }
+
+    public void driveEncoderRawTelemetry() {
+
+        telemetryControl.addData("Front Left Position", fl.getCurrentPosition());
+        telemetryControl.addData("Front Right Position", fr.getCurrentPosition());
+        telemetryControl.addData("Back Left Position", bl.getCurrentPosition());
+        telemetryControl.addData("Back Right Position", br.getCurrentPosition());
 
     }
 
