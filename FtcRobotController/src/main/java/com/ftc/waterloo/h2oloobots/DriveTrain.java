@@ -69,7 +69,7 @@ public class DriveTrain {
      *  |                    |
      *  O--------------------O
      */
-    double trackWidth = 1.0;
+    double trackWidth = 27.25;
     // how many inches the wheels travel in a full rotation of the robot
     double fullRotation = trackWidth * Math.PI;
 
