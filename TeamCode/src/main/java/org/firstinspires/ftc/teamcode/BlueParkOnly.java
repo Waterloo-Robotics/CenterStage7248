@@ -17,6 +17,11 @@ public class BlueParkOnly extends H2OLooAuto {
         driveTrain.EncoderAutoMecanumDrive(4, 0, 0, 0.75, 3);
         driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.75, 5);
         driveTrain.EncoderAutoMecanumDrive(84, 0, 0, 0.75, 8);
+        attachmentControl.intakeAuto();
+        driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.75, 1);
+        sleep(1000);
+        driveTrain.EncoderAutoMecanumDrive(6, 0, 0, 0.75, 1);
+        sleep(10000);
 
 //        attachmentControl.intakeAuto();
 

@@ -121,4 +121,10 @@ public class AttachmentControl {
         }
     }
 
+    public void intakeAuto() {
+
+        intakeGroup.setPower(-1);
+
+    }
+
 }
