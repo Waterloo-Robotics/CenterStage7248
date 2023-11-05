@@ -58,7 +58,7 @@ public class sampleCVPatrick extends OpMode {
     @Override
     public void loop() {
         telemetryControl.startCameraStream(webcam, 60);
-        telemetryControl.addData("Image Analysis",pipeline.getAnalysis());
+//        telemetryControl.addData("Image Analysis",pipeline.getAnalysis());
 //        telemetryControl.addData();
         telemetryControl.update();
     }
@@ -68,12 +68,15 @@ public class sampleCVPatrick extends OpMode {
 
 class SamplePipeline extends OpenCvPipeline {
 
-    Mat gray = new Mat();
+    Mat hsv = new Mat();
+    Mat hsvr = new Mat();
 
-    Mat YCrCb = new Mat();
-    Mat Y = new Mat();
+    //    Mat gray = new Mat();
+//
+//    Mat YCrCb = new Mat();
+//    Mat Y = new Mat();
     Mat RectA_Y = new Mat();
-    int avg;
+//    int avg;
 
     static final int WidthRectA = 100;
     static final int HeightRectA = 100;
@@ -85,43 +88,47 @@ class SamplePipeline extends OpenCvPipeline {
             RectATopLeftAnchor.x + WidthRectA,
             RectATopLeftAnchor.y + HeightRectA);
 
-    void inputToY(Mat grey) {
-        Imgproc.cvtColor(grey, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-        ArrayList<Mat> yCrCbChannels = new ArrayList<Mat>(3);
-        Core.split(YCrCb, yCrCbChannels);
-        Y = yCrCbChannels.get(0);
+//    void inputToY(Mat grey) {
+//        Imgproc.cvtColor(grey, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+//        ArrayList<Mat> yCrCbChannels = new ArrayList<Mat>(3);
+//        Core.split(YCrCb, yCrCbChannels);
+//        Y = yCrCbChannels.get(0);
+//
+//    }
 
-    }
-
-    @Override
-    public void init(Mat firstFrame) {
-        inputToY(firstFrame);
-        RectA_Y = Y.submat(new Rect(RectATLCorner, RectABRCorner));
-    }
+//    @Override
+//    public void init(Mat firstFrame) {
+//        inputToY(firstFrame);
+//        RectA_Y = Y.submat(new Rect(RectATLCorner, RectABRCorner));
+//    }
 
     @Override
     public Mat processFrame(Mat input) {
-        Imgproc.cvtColor(input, gray, Imgproc.COLOR_RGB2GRAY);
-        avg = (int) Core.mean(RectA_Y).val[0];
-        YCrCb.release(); // don't leak memory!
-        Y.release(); // don't leak memory!
+        Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
+        Core.inRange(hsv, new Scalar(98, 50, 50), new Scalar(200, 255, 255), hsvr);
 
-
+        Core.bitwise_and(hsv, hsv, hsvr);
+//        Imgproc.cvtColor(input, gray, Imgproc.COLOR_RGB2GRAY);
+//        avg = (int) Core.mean(RectA_Y).val[0];
+//        YCrCb.release(); // don't leak memory!
+//        Y.release(); // don't leak memory!
         Imgproc.rectangle( // rings
-                gray, // Buffer to draw on
+                hsv, // Buffer to draw on
                 RectATLCorner, // First point which defines the rectangle
                 RectABRCorner, // Second point which defines the rectangle
-                new Scalar(0,0,255), // The color the rectangle is drawn in
+                new Scalar(0, 0, 255), // The color the rectangle is drawn in
                 2); // Thickness of the rectangle lines
 
-        return gray;
-    }
-
-    public int getAnalysis() {
-        return avg;
+        return hsvr;
     }
 
 }
+
+//    public int getAnalysis() {
+//        return avg;
+//    }
+//
+//}
 
 //class SamplePipeline extends OpenCvPipeline {
 //
