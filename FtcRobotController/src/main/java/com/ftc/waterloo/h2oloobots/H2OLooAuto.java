@@ -9,7 +9,6 @@ public abstract class H2OLooAuto extends LinearOpMode {
 
     public DriveTrain driveTrain;
     public OdometryControl odometryControl;
-    public DriveTrain driveTrain;
     public AttachmentControl attachmentControl;
 
     public CameraControl cameraControl;
