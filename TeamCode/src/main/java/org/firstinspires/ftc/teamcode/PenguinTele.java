@@ -31,23 +31,10 @@ public class PenguinTele extends H2OLooTeleOp {
                 gamepad1.right_stick_x * 0.7
         );
 
-        if (gamepad1.a) {
-
-            if (!isAPressed) {
-
-                attachmentControl.droneTeleOp(true);
-
-            }
-
-            isAPressed = true;
-
-        } else {
-
-            isAPressed = false;
-
-        }
-
+        attachmentControl.droneTeleOp();
         attachmentControl.intakeTeleOp();
+        attachmentControl.hangServoTeleOp();
+        attachmentControl.hangMotorManual();
 
     }
 

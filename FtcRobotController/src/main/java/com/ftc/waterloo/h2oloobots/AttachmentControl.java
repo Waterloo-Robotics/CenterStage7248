@@ -25,6 +25,12 @@ public class AttachmentControl {
     boolean lastRightBumper = false;
     boolean lastLeftBumper = false;
 
+    DcMotor hangMotor;
+    Servo hangServo;
+    boolean isGP2APressed = false;
+
+    boolean isAPressed = false;
+
     public AttachmentControl(HardwareMap hardwareMap, TelemetryControl telemetryControl, Gamepad gamepad1, Gamepad gamepad2) {
 
         this.telemetryControl = telemetryControl;
@@ -38,7 +44,56 @@ public class AttachmentControl {
         intakeMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeGroup = new MotorControlGroup(intakeMotorLeft, intakeMotorRight);
 
-        
+        hangMotor = hardwareMap.dcMotor.get("hangMotor");
+        hangServo = hardwareMap.servo.get("hangServo");
+
+    }
+
+    public void hangMotorManual() {
+
+        hangMotor.setPower(gamepad2.left_stick_y);
+
+    }
+
+    public void hangServoManual() {
+
+        if (gamepad2.a) {
+            hangServo.setPosition(hangServo.getPosition() + 0.001);
+        } else if (gamepad2.b) {
+            hangServo.setPosition(hangServo.getPosition() - 0.001);
+        }
+
+        telemetryControl.addData("Hang Servo Position", hangServo.getPosition());
+
+
+    }
+
+    public void hangServoTeleOp() {
+
+        if (gamepad2.a) {
+
+            if (!isGP2APressed) {
+
+                if (hangServo.getPosition() < 0.18) {
+
+                    hangServo.setPosition(0.53);
+
+                } else {
+
+                    hangServo.setPosition(0.13);
+
+                }
+
+
+            }
+
+            isGP2APressed = true;
+
+        } else {
+
+            isGP2APressed = false;
+
+        }
 
     }
 
@@ -55,19 +110,29 @@ public class AttachmentControl {
 
     }
 
-    public void droneTeleOp(boolean button) {
+    public void droneTeleOp() {
 
-        if (button) {
+        if (gamepad1.a) {
 
-            if (droneServo.getPosition() > 0.85) {
+            if (!isAPressed) {
 
-                droneServo.setPosition(0);
+                if (droneServo.getPosition() > 0.85) {
 
-            } else {
+                    droneServo.setPosition(0);
 
-                droneServo.setPosition(1);
+                } else {
+
+                    droneServo.setPosition(1);
+
+                }
 
             }
+
+            isAPressed = true;
+
+        } else {
+
+            isAPressed = false;
 
         }
 
