@@ -46,6 +46,7 @@ public class AttachmentControl {
 
         hangMotor = hardwareMap.dcMotor.get("hangMotor");
         hangServo = hardwareMap.servo.get("hangServo");
+        hangServo.scaleRange(0.522, 0.94);
 
     }
 
@@ -58,9 +59,13 @@ public class AttachmentControl {
     public void hangServoManual() {
 
         if (gamepad2.a) {
+
             hangServo.setPosition(hangServo.getPosition() + 0.001);
+
         } else if (gamepad2.b) {
+
             hangServo.setPosition(hangServo.getPosition() - 0.001);
+
         }
 
         telemetryControl.addData("Hang Servo Position", hangServo.getPosition());
@@ -74,13 +79,13 @@ public class AttachmentControl {
 
             if (!isGP2APressed) {
 
-                if (hangServo.getPosition() < 0.18) {
+                if (hangServo.getPosition() < 0.05) {
 
-                    hangServo.setPosition(0.53);
+                    hangServo.setPosition(1);
 
                 } else {
 
-                    hangServo.setPosition(0.13);
+                    hangServo.setPosition(0);
 
                 }
 
