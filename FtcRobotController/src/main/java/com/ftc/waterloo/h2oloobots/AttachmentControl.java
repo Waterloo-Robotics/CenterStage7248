@@ -46,7 +46,7 @@ public class AttachmentControl {
 
         hangMotor = hardwareMap.dcMotor.get("hangMotor");
         hangServo = hardwareMap.servo.get("hangServo");
-        hangServo.scaleRange(0.522, 0.94);
+        hangServo.scaleRange(0.49, 0.94);
 
     }
 
@@ -81,6 +81,10 @@ public class AttachmentControl {
 
                 if (hangServo.getPosition() < 0.05) {
 
+                    hangServo.setPosition(0.832);
+
+                } else if (hangServo.getPosition() < 0.85) {
+
                     hangServo.setPosition(1);
 
                 } else {
@@ -102,10 +106,10 @@ public class AttachmentControl {
 
     }
 
-    public void droneManual(boolean increaseButton, boolean decreaseButton) {
+    public void droneManual() {
         double position = droneServo.getPosition();
-        if (increaseButton) position += 0.005;
-        else if (decreaseButton) position -= 0.05;
+        if (gamepad2.a) position += 0.005;
+        else if (gamepad2.b) position -= 0.05;
 
         if (position > 1) position = 1;
         if (position < 0) position = 0;
