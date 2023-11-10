@@ -262,7 +262,7 @@ public class DriveTrain {
      * @param FBInput forward and back input, range -1 to 1
      * @param LRInput left and right strafing input, range -1 to 1
      * @param pivotInput pivot input, range -1 to 1*/
-    public void teleOpDrive(double FBInput, double LRInput, double pivotInput) {
+    public void teleOpDrive(double FBInput, double LRInput, double pivotInput, AttachmentControl attachmentControl) {
 
         switch (driveTrainType) {
 
@@ -274,8 +274,7 @@ public class DriveTrain {
                 break;
 
             case MECANUM:
-                this.MecanumTeleOp(FBInput, LRInput, pivotInput);
-                telemetryControl.motorTelemetryUpdate(fl.getPower(), fr.getPower(), bl.getPower(), br.getPower());
+                this.MecanumTeleOp(FBInput, LRInput, pivotInput, attachmentControl);
                 break;
 
         }
@@ -308,7 +307,7 @@ public class DriveTrain {
      * @param FBInput input used for forward and back movements.
      * @param LRInput input used for strafing left and right.
      * @param PivotInput input used for turning.*/
-    public void MecanumTeleOp(double FBInput, double LRInput, double PivotInput) {
+    public void MecanumTeleOp(double FBInput, double LRInput, double PivotInput, AttachmentControl attachmentControl) {
 
         double speedMul;
 
