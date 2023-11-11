@@ -38,6 +38,7 @@ public class AttachmentControl {
         this.gamepad2 = gamepad2;
         droneServo = hardwareMap.servo.get("droneServo");
         droneServo.scaleRange(0.35, 1);
+        droneServo.setPosition(1);
 
         intakeMotorLeft = hardwareMap.dcMotor.get("intakeMotorLeft");
         intakeMotorRight = hardwareMap.dcMotor.get("intakeMotorRight");
