@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.ftc.waterloo.h2oloobots.TelemetryControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,6 +11,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -19,6 +21,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
+@Disabled
 @TeleOp(name = "Blinded by the light", group = "!")
 public class sampleCVPatrick extends OpMode {
 
@@ -58,149 +61,51 @@ public class sampleCVPatrick extends OpMode {
     @Override
     public void loop() {
         telemetryControl.startCameraStream(webcam, 60);
-//        telemetryControl.addData("Image Analysis",pipeline.getAnalysis());
-//        telemetryControl.addData();
         telemetryControl.update();
     }
-
-
 }
-
-class SamplePipeline extends OpenCvPipeline {
-
-    Mat hsv = new Mat();
-    Mat hsvr = new Mat();
-
-    //    Mat gray = new Mat();
-//
-//    Mat YCrCb = new Mat();
-//    Mat Y = new Mat();
-    Mat RectA_Y = new Mat();
-//    int avg;
-
-    static final int WidthRectA = 100;
-    static final int HeightRectA = 100;
-    static final Point RectATopLeftAnchor = new Point(200, 150);
-    Point RectATLCorner = new Point(
-            RectATopLeftAnchor.x,
-            RectATopLeftAnchor.y);
-    Point RectABRCorner = new Point(
-            RectATopLeftAnchor.x + WidthRectA,
-            RectATopLeftAnchor.y + HeightRectA);
-
-//    void inputToY(Mat grey) {
-//        Imgproc.cvtColor(grey, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-//        ArrayList<Mat> yCrCbChannels = new ArrayList<Mat>(3);
-//        Core.split(YCrCb, yCrCbChannels);
-//        Y = yCrCbChannels.get(0);
-//
-//    }
-
-//    @Override
-//    public void init(Mat firstFrame) {
-//        inputToY(firstFrame);
-//        RectA_Y = Y.submat(new Rect(RectATLCorner, RectABRCorner));
-//    }
-
-    @Override
-    public Mat processFrame(Mat input) {
-        Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
-        Core.inRange(hsv, new Scalar(98, 50, 50), new Scalar(200, 255, 255), hsvr);
-
-        Core.bitwise_and(hsv, hsv, hsvr);
-//        Imgproc.cvtColor(input, gray, Imgproc.COLOR_RGB2GRAY);
-//        avg = (int) Core.mean(RectA_Y).val[0];
-//        YCrCb.release(); // don't leak memory!
-//        Y.release(); // don't leak memory!
-        Imgproc.rectangle( // rings
-                hsv, // Buffer to draw on
-                RectATLCorner, // First point which defines the rectangle
-                RectABRCorner, // Second point which defines the rectangle
-                new Scalar(0, 0, 255), // The color the rectangle is drawn in
-                2); // Thickness of the rectangle lines
-
-        return hsvr;
-    }
-
-}
-
-//    public int getAnalysis() {
-//        return avg;
-//    }
-//
-//}
 
 //class SamplePipeline extends OpenCvPipeline {
 //
-//    Scalar RED = new Scalar(81, 240, 90);
+//    Mat hsv = new Mat();
+//    Mat hsvr = new Mat();
 //
-//    Mat YCrCb = new Mat();
-//    Mat Y = new Mat();
-//    Mat RectA_Y = new Mat();
-//    int avg;
-//    int avgA;
-//    static final int STREAM_WIDTH = 1920; // modify for your camera
-//    static final int STREAM_HEIGHT = 1080; // modify for your camera
+//    Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
+//    Core.inRange(hsv, new Scalar(98, 50, 50), new Scalar(200, 255, 255), hsvr);
 //
-//
-//    static final int WidthRectA = 500;
-//    static final int HeightRectA = 500;
-//
-//
-//    static final Point RectATopLeftAnchor = new Point((STREAM_WIDTH - WidthRectA) / 2 + 300, ((STREAM_HEIGHT - HeightRectA) / 2) - 100);
-//    Point RectATLCorner = new Point(
-//            RectATopLeftAnchor.x,
-//            RectATopLeftAnchor.y);
-//    Point RectABRCorner = new Point(
-//            RectATopLeftAnchor.x + WidthRectA,
-//            RectATopLeftAnchor.y + HeightRectA);
+//    Core.bitwise_and(hsv, hsv, hsvr)
 //
 //
 //
+////    Mat RectA_Y = new Mat();
 //
-//    /*
-//     * This function takes the RGB frame, converts to YCrCb,
-//     * and extracts the Y channel to the 'Y' variable
-//     */
-//    void inputToY(Mat input) {
-//        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-//        ArrayList<Mat> yCrCbChannels = new ArrayList<Mat>(3);
-//        Core.split(YCrCb, yCrCbChannels);
-//        Y = yCrCbChannels.get(0);
+////    static final int WidthRectA = 100;
+////    static final int HeightRectA = 100;
+////    static final Point RectATopLeftAnchor = new Point(200, 150);
+////    Point RectATLCorner = new Point(
+////            RectATopLeftAnchor.x,
+////            RectATopLeftAnchor.y);
+////    Point RectABRCorner = new Point(
+////            RectATopLeftAnchor.x + WidthRectA,
+////            RectATopLeftAnchor.y + HeightRectA);
 //
-//    }
 //
-//    @Override
-//    public void init(Mat firstFrame) {
-//        inputToY(firstFrame);
-//        RectA_Y = Y.submat(new Rect(RectATLCorner, RectABRCorner));
-//    }
 //
 //    @Override
 //    public Mat processFrame(Mat input) {
-//        inputToY(input);
-////        System.out.println("processing requested");
-//        avg = (int) Core.mean(Y).val[0];
-//        avgA = (int) Core.mean(RectA_Y).val[0];
-//        YCrCb.release(); // don't leak memory!
-//        Y.release(); // don't leak memory!
+//        Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
+//        Core.inRange(hsv, new Scalar(98, 50, 50), new Scalar(200, 255, 255), hsvr);
 //
+//        Core.bitwise_and(hsv, hsv, hsvr);
 //
-//        Imgproc.rectangle( // rings
-//                input, // Buffer to draw on
-//                RectATLCorner, // First point which defines the rectangle
-//                RectABRCorner, // Second point which defines the rectangle
-//                new Scalar(0,0,255), // The color the rectangle is drawn in
-//                2); // Thickness of the rectangle lines
+////        Imgproc.rectangle( // rings
+////                hsv, // Buffer to draw on
+////                RectATLCorner, // First point which defines the rectangle
+////                RectABRCorner, // Second point which defines the rectangle
+////                new Scalar(0, 0, 255), // The color the rectangle is drawn in
+////                2); // Thickness of the rectangle lines
 //
-//        return input;
+//        return hsvr;
 //    }
-//
-//    public int getAnalysis() {
-//        return avg;
-//    }
-//    public int getRectA_Analysis() {
-//        return avgA;
-//    }
-//
-//}
+
+
