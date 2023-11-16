@@ -158,9 +158,9 @@ public class AttachmentControl {
     public void intakeTeleOp() {
         if (gamepad1.right_bumper) {
 
-            if (!lastRightBumper && intakeGroup.getPower() < 0.8) {
+            if (!lastRightBumper && intakeGroup.getPower() < 0.5) {
 
-                intakeGroup.setPower(1);
+                intakeGroup.setPower(0.6);
 
             } else if (!lastRightBumper) {
 
