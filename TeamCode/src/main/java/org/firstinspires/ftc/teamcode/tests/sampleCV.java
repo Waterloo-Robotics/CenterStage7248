@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.ftc.waterloo.h2oloobots.TelemetryControl;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -25,8 +27,11 @@ public class sampleCV extends OpMode {
     static final int STREAM_HEIGHT = 480; // modify for your camera
     OpenCvWebcam webcam;
     SamplePipeline pipeline;
+    TelemetryControl telemetryControl;
     @Override
     public void init() {
+
+        telemetryControl = new TelemetryControl(telemetry);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = null;
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"); // put your camera's name here
@@ -89,18 +94,35 @@ class SamplePipeline extends OpenCvPipeline {
         Mat into_hsv = new Mat();
         Imgproc.cvtColor(input, into_hsv, Imgproc.COLOR_BGR2HSV);
 
-        Mat blueMask = new Mat();
-        Core.inRange(into_hsv, lowerBlue, upperBlue, blueMask);
-//        Core.inRange(into_hsv, lowerRed, upperRed, blueMask);
-        Imgproc.morphologyEx(blueMask, blueMask, Imgproc.MORPH_OPEN, new Mat());
-        Imgproc.morphologyEx(blueMask, blueMask, Imgproc.MORPH_CLOSE, new Mat());
+        Mat processed = new Mat();
+        Core.inRange(into_hsv, lowerBlue, upperBlue, processed);
+//        Core.inRange(into_hsv, lowerRed, upperRed, processed);
+        Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_OPEN, new Mat());
+        Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_CLOSE, new Mat());
 
-        Imgproc.GaussianBlur(blueMask, blueMask, new Size(5.0, 15.0), 0.0);
+        Imgproc.GaussianBlur(processed, processed, new Size(5.0, 15.0), 0.0);
 
         List<MatOfPoint> contours = new ArrayList<>();
 
-        Imgproc.findContours(blueMask, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(processed, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));
+
+        int x = 0;
+        int y = 0;
+        int h = 480;
+        int w = (int) (640 / 3.0);
+
+        Imgproc.rectangle(
+            input,
+            new Rect(
+                x,
+                y,
+                w,
+                h
+            ),
+            new Scalar(196, 23, 112),
+            2
+        );
 
         return input;
     }
