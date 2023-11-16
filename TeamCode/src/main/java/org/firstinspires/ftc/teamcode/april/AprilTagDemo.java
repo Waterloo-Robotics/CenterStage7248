@@ -141,9 +141,9 @@ public class AprilTagDemo extends LinearOpMode
                         Orientation rot = Orientation.getOrientation(detection.pose.R, AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
 
                         telemetryControl.addLine(String.format("\nDetected tag ID=%d", detection.id));
-                        telemetryControl.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-                        telemetryControl.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-                        telemetryControl.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+                        telemetryControl.addLine(String.format("Translation X: %.2f feet", detection.pose.x));
+                        telemetryControl.addLine(String.format("Translation Y: %.2f feet", detection.pose.y));
+                        telemetryControl.addLine(String.format("Translation Z: %.2f feet", detection.pose.z));
                         telemetryControl.addLine(String.format("Rotation Yaw: %.2f degrees", rot.firstAngle));
                         telemetryControl.addLine(String.format("Rotation Pitch: %.2f degrees", rot.secondAngle));
                         telemetryControl.addLine(String.format("Rotation Roll: %.2f degrees", rot.thirdAngle));
