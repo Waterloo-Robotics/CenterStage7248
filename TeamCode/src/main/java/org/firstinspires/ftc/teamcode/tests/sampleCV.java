@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import static org.firstinspires.ftc.teamcode.tests.sampleCV.STREAM_HEIGHT;
+import static org.firstinspires.ftc.teamcode.tests.sampleCV.STREAM_WIDTH;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.ftc.waterloo.h2oloobots.TelemetryControl;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -9,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -64,6 +69,21 @@ public class sampleCV extends OpMode {
 }
 
 class SamplePipeline extends OpenCvPipeline {
+    private double borderLeftX = 0;     //fraction of pixels from the left side of the cam to skip
+    private double borderRightX = 0;    //fraction of pixels from the right of the cam to skip
+    private double borderTopY = 0;      //fraction of pixels from the top of the cam to skip
+    private double borderBottomY = 0;   //fraction of pixels from the bottom of the cam to skip
+
+    private int loopCounter = 0;
+    private int pLoopCounter = 0;
+
+    private final Mat mat = new Mat();
+    private final Mat processed = new Mat();
+
+    private Rect maxRect = new Rect(600,1,1,1);
+
+    private double maxArea = 0;
+    private boolean first = false;
 
 
 
@@ -86,16 +106,16 @@ class SamplePipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        Scalar upperRed = new Scalar(139, 255, 255);
-        Scalar lowerRed = new Scalar(98, 50, 50);
-        Scalar upperBlue = new Scalar(30, 255, 255);
-        Scalar lowerBlue = new Scalar(0, 50, 50);
+        Scalar upperBlue = new Scalar(139, 255, 255);
+        Scalar lowerBlue = new Scalar(98, 50, 50);
+        Scalar upperRed = new Scalar(30, 255, 255);
+        Scalar lowerRed = new Scalar(0, 50, 50);
 
         Mat into_hsv = new Mat();
         Imgproc.cvtColor(input, into_hsv, Imgproc.COLOR_BGR2HSV);
 
         Mat processed = new Mat();
-        Core.inRange(into_hsv, lowerBlue, upperBlue, processed);
+        Core.inRange(into_hsv, lowerRed, upperRed, processed);
 //        Core.inRange(into_hsv, lowerRed, upperRed, processed);
         Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_OPEN, new Mat());
         Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_CLOSE, new Mat());
@@ -109,20 +129,72 @@ class SamplePipeline extends OpenCvPipeline {
 
         int x = 0;
         int y = 0;
-        int h = 480;
-        int w = (int) (640 / 3.0);
+        int h = (int) processed.size().height;
+        int w = (int) (processed.size().width / 3.0);
 
         Imgproc.rectangle(
-            input,
-            new Rect(
-                x,
-                y,
-                w,
-                h
-            ),
-            new Scalar(196, 23, 112),
-            2
+                input,
+                new Rect(
+                        x,
+                        y,
+                        w,
+                        h
+                ),
+                new Scalar(196, 23, 112),
+                2
         );
+
+        Imgproc.rectangle(
+                input,
+                new Rect(
+                        x + 2 * w,
+                        y,
+                        w,
+                        h
+                ),
+                new Scalar(196, 23, 112),
+                2
+        );
+
+        for (MatOfPoint contour : contours) {
+            Point[] contourArray = contour.toArray();
+
+            // Bound Rectangle if Contour is Large Enough
+            if (contourArray.length >= 15) {
+                MatOfPoint2f areaPoints = new MatOfPoint2f(contourArray);
+                Rect rect = Imgproc.boundingRect(areaPoints);
+
+                if (                        rect.area() > maxArea
+                        && rect.x + (rect.width / 2.0)  > (borderLeftX * STREAM_WIDTH)
+                        && rect.x + (rect.width / 2.0)  < STREAM_WIDTH - (borderRightX * STREAM_WIDTH)
+                        && rect.y + (rect.height / 2.0) > (borderTopY * STREAM_HEIGHT)
+                        && rect.y + (rect.height / 2.0) < STREAM_HEIGHT - (borderBottomY * STREAM_HEIGHT)
+
+                        || loopCounter - pLoopCounter   > 6
+                        && rect.x + (rect.width / 2.0)  > (borderLeftX * STREAM_WIDTH)
+                        && rect.x + (rect.width / 2.0)  < STREAM_WIDTH - (borderRightX * STREAM_WIDTH)
+                        && rect.y + (rect.height / 2.0) > (borderTopY * STREAM_HEIGHT)
+                        && rect.y + (rect.height / 2.0) < STREAM_HEIGHT - (borderBottomY * STREAM_HEIGHT)
+                ){
+                    maxArea = rect.area();
+                    maxRect = rect;
+                    pLoopCounter++;
+                    loopCounter = pLoopCounter;
+                    first = true;
+                }
+                else if(loopCounter - pLoopCounter > 10){
+                    maxArea = new Rect().area();
+                    maxRect = new Rect();
+                }
+
+                areaPoints.release();
+            }
+            contour.release();
+        }
+        if (contours.isEmpty()) {
+            maxRect = new Rect(600,1,1,1);
+        }
+
 
         return input;
     }
