@@ -21,7 +21,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "Blinded by the light", group = "!")
 public class sampleCVPatrick extends OpMode {
 
