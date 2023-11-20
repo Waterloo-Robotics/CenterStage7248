@@ -178,9 +178,9 @@ public class AttachmentControl {
 
         if (gamepad1.left_bumper) {
 
-            if (!lastLeftBumper && intakeGroup.getPower() > -0.35) {
+            if (!lastLeftBumper && intakeGroup.getPower() > -0.10) {
 
-                intakeGroup.setPower(-0.375);
+                intakeGroup.setPower(-0.15);
 
             } else if (!lastLeftBumper) {
 
@@ -199,7 +199,13 @@ public class AttachmentControl {
 
     public void intakeAuto() {
 
-        intakeGroup.setPower(-1);
+        intakeGroup.setPower(-20);
+
+    }
+
+    public void intakeAutoWithPower(double intakeMotorPower) {
+
+        intakeGroup.setPower(intakeMotorPower);
 
     }
 

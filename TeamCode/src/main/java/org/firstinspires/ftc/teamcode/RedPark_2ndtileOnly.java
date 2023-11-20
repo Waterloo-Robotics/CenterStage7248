@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous
+@Autonomous (name = "Red 2nd tile Park Only", group = "Zoo!")
 public class RedPark_2ndtileOnly extends H2OLooAuto {
 
     public void opModeInit() {

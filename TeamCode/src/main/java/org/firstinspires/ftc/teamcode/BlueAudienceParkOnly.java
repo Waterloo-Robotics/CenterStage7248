@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous
-public class BluePark_2ndtileOnly extends H2OLooAuto {
+@Autonomous (name = "Blue Audience Park Only", group = "Zoo!")
+public class BlueAudienceParkOnly extends H2OLooAuto {
 
     public void opModeInit() {
 
@@ -14,13 +14,11 @@ public class BluePark_2ndtileOnly extends H2OLooAuto {
 
     public void opModePeriodic() {
 
-        driveTrain.EncoderAutoMecanumDrive(24, 0, 0, 0.75, 3);
+        sleep(2000); // adding delay to avoid collision during match
+        driveTrain.EncoderAutoMecanumDrive(4, 0, 0, 0.75, 3);
         driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.75, 5);
-        driveTrain.EncoderAutoMecanumDrive(84, 0, 0, 0.75, 8);
-        attachmentControl.intakeAuto();
-        driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.75, 1);
-        sleep(1000);
-        driveTrain.EncoderAutoMecanumDrive(6, 0, 0, 0.75, 1);
+        driveTrain.EncoderAutoMecanumDrive(77, 0, 0, 0.75, 8);
+        attachmentControl.intakeAutoWithPower(-0.20);
         sleep(10000);
 
 //        attachmentControl.intakeAuto();
