@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.tests.sampleCV.STREAM_WIDTH;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.ftc.waterloo.h2oloobots.TelemetryControl;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -26,6 +27,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.ArrayList;
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "Light of my Life", group = "!")
 public class sampleCV extends OpMode {
     static final int STREAM_WIDTH = 640; // modify for your camera
