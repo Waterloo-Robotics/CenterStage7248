@@ -40,10 +40,10 @@ public class AttachmentControl {
         droneServo.scaleRange(0.35, 1);
         droneServo.setPosition(1);
 
-        intakeMotorLeft = hardwareMap.dcMotor.get("intakeMotorLeft");
-        intakeMotorRight = hardwareMap.dcMotor.get("intakeMotorRight");
-        intakeMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        intakeGroup = new MotorControlGroup(intakeMotorLeft, intakeMotorRight);
+//        intakeMotorLeft = hardwareMap.dcMotor.get("intakeMotorLeft");
+//        intakeMotorRight = hardwareMap.dcMotor.get("intakeMotorRight");
+//        intakeMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//        intakeGroup = new MotorControlGroup(intakeMotorLeft, intakeMotorRight);
 
         hangMotor = hardwareMap.dcMotor.get("hangMotor");
         hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -51,7 +51,13 @@ public class AttachmentControl {
         hangServo.scaleRange(0.49, 0.94);
 
         extendArmMotor = hardwareMap.dcMotor.get("extendArmMotor");
+        extendArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rotateArmMotor = hardwareMap.dcMotor.get("rotateArmMotor");
+        rotateArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotateArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rotateArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
@@ -214,12 +220,14 @@ public class AttachmentControl {
     public void extendArmMotorManual() {
 
         extendArmMotor.setPower(gamepad2.right_stick_x);
+        telemetryControl.addData("Extend Arm Position", extendArmMotor.getCurrentPosition());
 
     }
 
     public void rotateArmMotorManual() {
 
         rotateArmMotor.setPower(gamepad2.right_stick_y);
+        telemetryControl.addData("Rotate Arm Position", rotateArmMotor.getCurrentPosition());
 
     }
 

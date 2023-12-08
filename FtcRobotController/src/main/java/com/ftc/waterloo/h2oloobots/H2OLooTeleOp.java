@@ -15,7 +15,7 @@ public abstract class H2OLooTeleOp extends LinearOpMode {
     public void runOpMode() {
 
         telemetryControl = new TelemetryControl(telemetry);
-        driveTrain = new DriveTrain(hardwareMap, telemetryControl, attachmentControl);
+        driveTrain = new DriveTrain(hardwareMap, telemetryControl);
         attachmentControl = new AttachmentControl(hardwareMap, telemetryControl, gamepad1, gamepad2);
 //        cameraControl = new CameraControl(hardwareMap, telemetryControl);
 

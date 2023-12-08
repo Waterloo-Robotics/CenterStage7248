@@ -85,16 +85,13 @@ public class DriveTrain {
     /**Initialises the drivetrain variable.
      * @param hardwareMap the local HardwareMap variable from in the runOpMode() void.
      * @param telemetryControl the TelemetryControl variable initialized in the runOpMode() void.
-     * @param attachmentControl the AttachmentControl vatiable initialized in the runOpMode() void.
      * */
     public DriveTrain(HardwareMap hardwareMap,
-                      TelemetryControl telemetryControl,
-                      AttachmentControl attachmentControl
+                      TelemetryControl telemetryControl
     ) {
 
         this.hardwareMap = hardwareMap;
         this.telemetryControl = telemetryControl;
-        this.attachmentControl = attachmentControl;
         this.FourMotorInit();
 
     }
@@ -228,6 +225,7 @@ public class DriveTrain {
 
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
@@ -264,6 +262,7 @@ public class DriveTrain {
      * @param pivotInput pivot input, range -1 to 1*/
     public void teleOpDrive(double FBInput, double LRInput, double pivotInput, AttachmentControl attachmentControl) {
 
+        double speedMul;
         switch (driveTrainType) {
 
             case TWO_WHEEL_DRIVE:
@@ -274,7 +273,17 @@ public class DriveTrain {
                 break;
 
             case MECANUM:
-                this.MecanumTeleOp(FBInput, LRInput, pivotInput, attachmentControl);
+
+                if (attachmentControl.hangServo.getPosition() > 0.8) {
+
+                    speedMul = 0.25;
+
+                } else {
+
+                    speedMul = 0.75;
+
+                }
+                this.MecanumTeleOp(FBInput * speedMul, LRInput * speedMul, pivotInput * speedMul);
                 break;
 
         }
@@ -307,29 +316,18 @@ public class DriveTrain {
      * @param FBInput input used for forward and back movements.
      * @param LRInput input used for strafing left and right.
      * @param PivotInput input used for turning.*/
-    public void MecanumTeleOp(double FBInput, double LRInput, double PivotInput, AttachmentControl attachmentControl) {
+    public void MecanumTeleOp(double FBInput, double LRInput, double PivotInput) {
 
-        double speedMul;
 
         double frPower = -FBInput - LRInput - (PivotInput * 0.75);
         double brPower = -FBInput + LRInput - (PivotInput * 0.75);
         double flPower = -FBInput + LRInput + (PivotInput * 0.75);
         double blPower = -FBInput - LRInput + (PivotInput * 0.75);
 
-        if (attachmentControl.hangServo.getPosition() > 0.8) {
-
-            speedMul = 0.25;
-
-        } else {
-
-            speedMul = 0.75;
-
-        }
-
-        fr.setPower(frPower * speedMul);
-        br.setPower(brPower * speedMul);
-        fl.setPower(flPower * speedMul);
-        bl.setPower(blPower * speedMul);
+        fr.setPower(frPower);
+        br.setPower(brPower);
+        fl.setPower(flPower);
+        bl.setPower(blPower);
 
         telemetryControl.motorTelemetryUpdate(
                 fl.getPower(),
