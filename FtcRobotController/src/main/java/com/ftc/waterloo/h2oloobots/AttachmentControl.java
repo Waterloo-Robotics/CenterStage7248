@@ -19,7 +19,7 @@ public class AttachmentControl {
     TelemetryControl telemetryControl;
     Gamepad gamepad1, gamepad2;
 
-    DcMotor intakeMotorLeft, intakeMotorRight;
+    DcMotor intakeMotorLeft, intakeMotorRight, extendArmMotor, rotateArmMotor;
     MotorControlGroup intakeGroup;
     Servo droneServo;
     boolean lastRightBumper = false;
@@ -49,6 +49,9 @@ public class AttachmentControl {
         hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangServo = hardwareMap.servo.get("hangServo");
         hangServo.scaleRange(0.49, 0.94);
+
+        extendArmMotor = hardwareMap.dcMotor.get("extendArmMotor");
+        rotateArmMotor = hardwareMap.dcMotor.get("rotateArmMotor");
 
     }
 
@@ -206,6 +209,17 @@ public class AttachmentControl {
     public void intakeAutoWithPower(double intakeMotorPower) {
 
         intakeGroup.setPower(intakeMotorPower);
+
+    }
+    public void extendArmMotorManual() {
+
+        extendArmMotor.setPower(gamepad2.right_stick_x);
+
+    }
+
+    public void rotateArmMotorManual() {
+
+        rotateArmMotor.setPower(gamepad2.right_stick_y);
 
     }
 
