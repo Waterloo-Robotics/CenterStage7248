@@ -50,6 +50,12 @@ public class AttachmentControl {
         hangServo = hardwareMap.servo.get("hangServo");
         hangServo.scaleRange(0.49, 0.94);
 
+        /*
+        Map the hardware configuration to software. Best practice is to use the same name between HW configuration and SW.
+        * Best practice is to default zero power behavior to BRAKE (instead of FLOAT)
+        * Best practice to reset the position encoder on the port (set to zero)
+        * RUN_WITHOUT_ENCODER does not disable the encoder. It instead tells the SDK not to use the motor encoder for built-in velocity control
+        */
         extendArmMotor = hardwareMap.dcMotor.get("extendArmMotor");
         extendArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -219,14 +225,14 @@ public class AttachmentControl {
     }
     public void extendArmMotorManual() {
 
-        extendArmMotor.setPower(gamepad2.right_stick_x);
+        extendArmMotor.setPower(gamepad2.right_trigger); //
         telemetryControl.addData("Extend Arm Position", extendArmMotor.getCurrentPosition());
 
     }
 
     public void rotateArmMotorManual() {
 
-        rotateArmMotor.setPower(gamepad2.right_stick_y);
+        rotateArmMotor.setPower(gamepad2.left_trigger);
         telemetryControl.addData("Rotate Arm Position", rotateArmMotor.getCurrentPosition());
 
     }
