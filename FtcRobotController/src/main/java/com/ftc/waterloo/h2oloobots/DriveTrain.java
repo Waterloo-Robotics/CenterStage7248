@@ -223,9 +223,7 @@ public class DriveTrain {
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
@@ -329,12 +327,12 @@ public class DriveTrain {
         fl.setPower(flPower);
         bl.setPower(blPower);
 
-        telemetryControl.motorTelemetryUpdate(
-                fl.getPower(),
-                fr.getPower(),
-                bl.getPower(),
-                br.getPower()
-        );
+//        telemetryControl.motorTelemetryUpdate(
+//                fl.getPower(),
+//                fr.getPower(),
+//                bl.getPower(),
+//                br.getPower()
+//        );
 
     }
 

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**This AttachmentControl class just offers a global area to store any non-drivebase commands and
  * devices to be used as chosen. Most imports should be added already, but if you need other
@@ -30,6 +31,8 @@ public class AttachmentControl {
     boolean isGP2APressed = false;
 
     boolean isAPressed = false;
+
+    TouchSensor bottomTouch, topTouch;
 
     public AttachmentControl(HardwareMap hardwareMap, TelemetryControl telemetryControl, Gamepad gamepad1, Gamepad gamepad2) {
 
@@ -64,6 +67,9 @@ public class AttachmentControl {
         rotateArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rotateArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        bottomTouch = hardwareMap.touchSensor.get("bottomTouch");
+        topTouch = hardwareMap.touchSensor.get("topTouch");
 
     }
 
@@ -225,15 +231,38 @@ public class AttachmentControl {
     }
     public void extendArmMotorManual() {
 
-        extendArmMotor.setPower(gamepad2.right_trigger); //
+        if ((extendArmMotor.getCurrentPosition() > -10 && gamepad2.right_stick_x > 0) || (rotateArmMotor.getCurrentPosition() > -200 && extendArmMotor.getCurrentPosition() < -1200 && gamepad2.right_stick_x < 0) || (rotateArmMotor.getCurrentPosition() <= -200 && extendArmMotor.getCurrentPosition() < -2690 && gamepad2.right_stick_x < 0)) {
+
+            extendArmMotor.setPower(0);
+
+        } else {
+
+            extendArmMotor.setPower(gamepad2.right_stick_x);
+
+        }
         telemetryControl.addData("Extend Arm Position", extendArmMotor.getCurrentPosition());
 
     }
 
     public void rotateArmMotorManual() {
 
-        rotateArmMotor.setPower(gamepad2.left_trigger);
+        if ((bottomTouch.isPressed() && gamepad2.right_stick_y < 0) || (topTouch.isPressed() && gamepad2.right_stick_y > 0)) {
+
+            rotateArmMotor.setPower(0);
+
+        } else {
+
+            rotateArmMotor.setPower(gamepad2.right_stick_y * 0.75);
+
+        }
         telemetryControl.addData("Rotate Arm Position", rotateArmMotor.getCurrentPosition());
+
+    }
+
+    public void touchSensorTelemetry() {
+
+        telemetryControl.addData("Bottom Touch", bottomTouch.isPressed());
+        telemetryControl.addData("Top Touch", topTouch.isPressed());
 
     }
 
