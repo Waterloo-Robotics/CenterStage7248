@@ -231,13 +231,13 @@ public class AttachmentControl {
     }
     public void extendArmMotorManual() {
 
-        if ((extendArmMotor.getCurrentPosition() > -10 && gamepad2.right_stick_x > 0) || (rotateArmMotor.getCurrentPosition() > -200 && extendArmMotor.getCurrentPosition() < -1200 && gamepad2.right_stick_x < 0) || (rotateArmMotor.getCurrentPosition() <= -200 && extendArmMotor.getCurrentPosition() < -2690 && gamepad2.right_stick_x < 0)) {
+        if ((extendArmMotor.getCurrentPosition() > -10 && gamepad2.left_stick_y > 0) || (rotateArmMotor.getCurrentPosition() > -200 && extendArmMotor.getCurrentPosition() < -1200 && gamepad2.left_stick_y < 0) || (rotateArmMotor.getCurrentPosition() <= -200 && extendArmMotor.getCurrentPosition() < -2690 && gamepad2.left_stick_y < 0)) {
 
             extendArmMotor.setPower(0);
 
         } else {
 
-            extendArmMotor.setPower(gamepad2.right_stick_x);
+            extendArmMotor.setPower(gamepad2.left_stick_y);
 
         }
         telemetryControl.addData("Extend Arm Position", extendArmMotor.getCurrentPosition());
@@ -249,6 +249,10 @@ public class AttachmentControl {
         if ((bottomTouch.isPressed() && gamepad2.right_stick_y < 0) || (topTouch.isPressed() && gamepad2.right_stick_y > 0)) {
 
             rotateArmMotor.setPower(0);
+
+        } else if (rotateArmMotor.getCurrentPosition() > -500){
+
+            rotateArmMotor.setPower(gamepad2.right_stick_y * 0.33);
 
         } else {
 
