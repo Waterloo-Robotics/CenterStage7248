@@ -21,6 +21,7 @@ public class AttachmentControl {
     Gamepad gamepad1, gamepad2;
 
     DcMotor intakeMotorLeft, intakeMotorRight, extendArmMotor, rotateArmMotor;
+    Servo clawPickup, clawRotate;
     MotorControlGroup intakeGroup;
     Servo droneServo;
     boolean lastRightBumper = false;
@@ -53,6 +54,8 @@ public class AttachmentControl {
         hangServo = hardwareMap.servo.get("hangServo");
         hangServo.scaleRange(0.49, 0.94);
 
+        clawRotate = hardwareMap.servo.get("clawRotate");
+        clawPickup = hardwareMap.servo.get("clawPickup");
         /*
         Map the hardware configuration to software. Best practice is to use the same name between HW configuration and SW.
         * Best practice is to default zero power behavior to BRAKE (instead of FLOAT)
@@ -70,6 +73,38 @@ public class AttachmentControl {
 
         bottomTouch = hardwareMap.touchSensor.get("bottomTouch");
         topTouch = hardwareMap.touchSensor.get("topTouch");
+
+    }
+
+    public void clawPickupManual() {
+
+        if (gamepad2.y) {
+
+            clawPickup.setPosition(clawPickup.getPosition() + 0.03);
+
+        } else if (gamepad2.a) {
+
+            clawPickup.setPosition(clawPickup.getPosition() - 0.03);
+
+        }
+
+        telemetryControl.addData("Claw Pickup Position", clawPickup.getPosition());
+
+    }
+
+    public void clawRotateManual() {
+
+        if (gamepad2.dpad_up) {
+
+            clawRotate.setPosition(clawRotate.getPosition() + 0.03);
+
+        } else if (gamepad2.dpad_down) {
+
+            clawRotate.setPosition(clawRotate.getPosition() - 0.03);
+
+        }
+
+        telemetryControl.addData("Claw Rotate Position", clawRotate.getPosition());
 
     }
 

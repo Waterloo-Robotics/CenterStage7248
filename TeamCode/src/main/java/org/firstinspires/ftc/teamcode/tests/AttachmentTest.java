@@ -47,10 +47,12 @@ public class AttachmentTest extends H2OLooTeleOp {
 
 //        attachmentControl.intakeManual(gamepad2.left_stick_x);
 
-        attachmentControl.hangServoManual();
-        attachmentControl.hangMotorManual(); // gamepad 2 left stick Y
+//        attachmentControl.hangServoManual();
+//        attachmentControl.hangMotorManual(); // gamepad 2 left stick Y
         attachmentControl.extendArmMotorManual(); // gamepad 2 right stick x
         attachmentControl.rotateArmMotorManual(); // gamepad 2 right stick y
+        attachmentControl.clawPickupManual();
+        attachmentControl.clawRotateManual();
         attachmentControl.touchSensorTelemetry();
 
         cameraControl.followAprilTag(driveTrain, attachmentControl);
