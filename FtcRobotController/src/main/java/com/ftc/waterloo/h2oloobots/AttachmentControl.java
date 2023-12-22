@@ -51,6 +51,7 @@ public class AttachmentControl {
         hangServo.scaleRange(0.49, 0.94);
 
         clawRotate = hardwareMap.servo.get("clawRotate");
+        clawRotate.scaleRange(0.569, 0.968);
         clawPickupLeft = hardwareMap.servo.get("clawPickupLeft");
         clawPickupLeft.scaleRange(0.45, 0.63);
         clawPickupRight = hardwareMap.servo.get("clawPickupRight");

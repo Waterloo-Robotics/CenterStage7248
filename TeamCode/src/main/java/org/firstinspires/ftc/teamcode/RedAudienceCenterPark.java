@@ -24,7 +24,7 @@ public class RedAudienceCenterPark extends H2OLooAuto {
         sleep(250);
         driveTrain.EncoderAutoMecanumDrive(77, 0, 0, 0.75, 5);
         sleep(250);
-        attachmentControl.intakeAutoWithPower(-0.20);
+//        attachmentControl.intakeAutoWithPower(-0.20);
         sleep(10000);
 
 //        attachmentControl.intakeAuto();

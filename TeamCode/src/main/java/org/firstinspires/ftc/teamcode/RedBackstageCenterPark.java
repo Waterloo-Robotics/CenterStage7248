@@ -24,7 +24,7 @@ public class RedBackstageCenterPark extends H2OLooAuto {
         driveTrain.EncoderAutoMecanumDrive(0,0, 90,0.75,1);
         sleep(250);
         driveTrain.EncoderAutoMecanumDrive(26, 0, 0, 0.75, 1);
-        attachmentControl.intakeAutoWithPower(-0.20);
+//        attachmentControl.intakeAutoWithPower(-0.20);
         sleep(10000);
 
     }
