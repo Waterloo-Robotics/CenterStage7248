@@ -2,11 +2,11 @@ package com.ftc.waterloo.h2oloobots;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**This AttachmentControl class just offers a global area to store any non-drivebase commands and
  * devices to be used as chosen. Most imports should be added already, but if you need other
@@ -20,13 +20,23 @@ public class AttachmentControl {
     TelemetryControl telemetryControl;
     Gamepad gamepad1, gamepad2;
 
-    DcMotor extendArmMotor, rotateArmMotor;
+    DcMotorEx extendArmMotor, rotateArmMotor;
+    ElapsedTime extendTime = new ElapsedTime();
+    boolean isExtendTimeStarted = true;
     Servo clawRotate;
     Servo clawPickupLeft, clawPickupRight;
     Servo droneServo;
-    boolean lastRightBumper = false;
-    boolean lastLeftBumper = false;
+    boolean firstStepCompleted = true;
     boolean lastAButton = false, lastBButton = false, lastXButton = false;
+    public enum ArmPosition {
+        LOW,
+        MED,
+        HIGH,
+        PICKUP,
+        CARRY
+    }
+
+    ArmPosition armPosition = ArmPosition.CARRY;
 
     DcMotor hangMotor;
     Servo hangServo;
@@ -52,27 +62,62 @@ public class AttachmentControl {
 
         clawRotate = hardwareMap.servo.get("clawRotate");
         clawRotate.scaleRange(0.569, 0.968);
+        clawRotate.setPosition(1);
         clawPickupLeft = hardwareMap.servo.get("clawPickupLeft");
         clawPickupLeft.scaleRange(0.45, 0.63);
+        clawPickupLeft.setPosition(0);
         clawPickupRight = hardwareMap.servo.get("clawPickupRight");
         clawPickupRight.scaleRange(0.64, 0.86);
+        clawPickupRight.setPosition(1);
         /*
         Map the hardware configuration to software. Best practice is to use the same name between HW configuration and SW.
         * Best practice is to default zero power behavior to BRAKE (instead of FLOAT)
         * Best practice to reset the position encoder on the port (set to zero)
         * RUN_WITHOUT_ENCODER does not disable the encoder. It instead tells the SDK not to use the motor encoder for built-in velocity control
         */
-        extendArmMotor = hardwareMap.dcMotor.get("extendArmMotor");
+        extendArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("extendArmMotor");
         extendArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extendArmMotor.setTargetPosition(0);
         extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rotateArmMotor = hardwareMap.dcMotor.get("rotateArmMotor");
+        extendArmMotor.setTargetPositionTolerance(30);
+        rotateArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("rotateArmMotor");
         rotateArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotateArmMotor.setTargetPosition(0);
         rotateArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rotateArmMotor.setTargetPositionTolerance(70);
 
         bottomTouch = hardwareMap.touchSensor.get("bottomTouch");
         topTouch = hardwareMap.touchSensor.get("topTouch");
+
+    }
+
+    public void setRotateArmMotor(double power) {
+
+        if ((bottomTouch.isPressed() && power < 0) || (topTouch.isPressed() && power > 0)) {
+
+            rotateArmMotor.setPower(0);
+
+        } else {
+
+            rotateArmMotor.setPower(power);
+
+        }
+
+    }
+
+    public void setRotateArmMotorEncoder() {
+
+        if ((bottomTouch.isPressed() && (rotateArmMotor.getCurrentPosition() > rotateArmMotor.getTargetPosition())) || (topTouch.isPressed() && (rotateArmMotor.getCurrentPosition() < rotateArmMotor.getTargetPosition()))) {
+
+            rotateArmMotor.setPower(0);
+
+        } else {
+
+            rotateArmMotor.setPower(1);
+
+        }
 
     }
 
@@ -103,87 +148,215 @@ public class AttachmentControl {
 
     }
 
-    public void clawPickupTeleOp() {
+    public void armTeleOp() {
 
-        if (gamepad2.a) {
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        extendArmMotor.setTargetPositionTolerance(70);
+        rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotateArmMotor.setTargetPositionTolerance(70);
 
-            if (!lastAButton) {
+        if (gamepad2.dpad_up) {
 
-                if (clawPickupRight.getPosition() == 0) {
+            armPosition = ArmPosition.HIGH;
+            clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
 
-                    clawPickupRight.setPosition(1);
+        } else if (gamepad2.dpad_left || gamepad2.dpad_right) {
 
-                } else {
+            armPosition = ArmPosition.MED;
+            clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
 
-                    clawPickupRight.setPosition(0);
+        } else if (gamepad2.dpad_down) {
 
-                }
+            armPosition = ArmPosition.LOW;
+            clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
 
-                if (clawPickupLeft.getPosition() == 0) {
+        } else if (gamepad2.b) {
 
-                    clawPickupLeft.setPosition(1);
+            armPosition = ArmPosition.CARRY;
+            clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 550;
+            clawPickupRight.setPosition(1);
+            clawPickupLeft.setPosition(0);
 
-                } else {
+        } else if (gamepad2.a) {
 
-                    clawPickupLeft.setPosition(0);
-
-                }
-
-            }
-
-            lastAButton = true;
-
-        } else {
-
-            lastAButton = false;
-
-        }
-
-        if (gamepad2.b) {
-
-            if (!lastBButton) {
-
-                if (clawPickupRight.getPosition() == 0) {
-
-                    clawPickupRight.setPosition(1);
-
-                } else {
-
-                    clawPickupRight.setPosition(0);
-
-                }
-
-            }
-
-            lastBButton = true;
-
-        } else {
-
-            lastBButton = false;
+            armPosition = ArmPosition.PICKUP;
+            clawRotate.setPosition(0);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 550;
+            clawPickupRight.setPosition(0);
+            clawPickupLeft.setPosition(1);
 
         }
 
-        if (gamepad2.x) {
+        switch (armPosition) {
 
-            if (!lastXButton) {
+            case HIGH:
 
-                if (clawPickupLeft.getPosition() == 0) {
-
-                    clawPickupLeft.setPosition(1);
-
-                } else {
-
-                    clawPickupLeft.setPosition(0);
-
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(4391);
+                    extendArmMotor.setTargetPosition(-2683);
                 }
+                break;
+
+            case MED:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(4731);
+                    extendArmMotor.setTargetPosition(-2137);
+                }
+                break;
+
+            case LOW:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(4900);
+                    extendArmMotor.setTargetPosition(-1225);
+                }
+                break;
+
+            case PICKUP:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(0);
+                    extendArmMotor.setTargetPosition(-350);
+                }
+                break;
+
+            case CARRY:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(0);
+                    extendArmMotor.setTargetPosition(0);
+                }
+                break;
+        }
+
+        if (!firstStepCompleted) {
+
+            extendArmMotor.setTargetPosition(0);
+            rotateArmMotor.setTargetPosition(500);
+
+            if ((rotateArmMotor.getCurrentPosition() < 550 && rotateArmMotor.getCurrentPosition() > 450) && (extendArmMotor.getCurrentPosition() < 100 && extendArmMotor.getCurrentPosition() > -100)) {
+
+                firstStepCompleted = true;
 
             }
 
-            lastXButton = true;
+        }
+
+        this.setRotateArmMotorEncoder();
+        /**The comments here are possibly useful for preventing the power drain caused when the extend motor tries to drive into its base.
+         * Not sure if it's necessary yet.*/
+//        if (armPosition == ArmPosition.CARRY && Math.abs(extendArmMotor.getVelocity()) < 100 && extendArmMotor.getCurrentPosition() > -80 && !isExtendTimeStarted) {
+//
+//            extendTime.reset();
+//            isExtendTimeStarted = true;
+//
+//        } else if (armPosition != ArmPosition.CARRY || extendArmMotor.getCurrentPosition() <= -80) isExtendTimeStarted = false;
+        if (!extendArmMotor.isBusy() && armPosition == ArmPosition.CARRY && Math.abs(extendArmMotor.getVelocity()) < 100 /*&& extendTime.seconds() > 1*/) {
+
+            extendArmMotor.setPower(0);
+            extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         } else {
 
-            lastXButton = false;
+            extendArmMotor.setPower(1);
+
+        }
+
+        telemetryControl.addData("Extend Arm Current Position", extendArmMotor.getCurrentPosition());
+        telemetryControl.addData("Extend Arm Target Position", extendArmMotor.getTargetPosition());
+        telemetryControl.addData("Extend Arm Error", extendArmMotor.getCurrentPosition() - extendArmMotor.getTargetPosition());
+        telemetryControl.addData("Extend Arm Is Busy", extendArmMotor.isBusy());
+        telemetryControl.addData("Rotate Arm Current Position", rotateArmMotor.getCurrentPosition());
+        telemetryControl.addData("Rotate Arm Target Position", rotateArmMotor.getTargetPosition());
+        telemetryControl.addData("Rotate Arm Is Busy", rotateArmMotor.isBusy());
+        telemetryControl.addData("Desired Position", armPosition);
+        telemetryControl.addData("Is First Step Completed", firstStepCompleted);
+
+    }
+
+    public void clawPickupTeleOp(boolean leftButton, boolean rightButton, boolean bothButton) {
+
+        if (!armPosition.equals(ArmPosition.CARRY)) {
+
+            if (bothButton) {
+
+                if (!lastAButton) {
+
+                    if (clawPickupRight.getPosition() < 0.1 || clawPickupLeft.getPosition() > 0.9) {
+
+                        clawPickupRight.setPosition(1);
+                        clawPickupLeft.setPosition(0);
+
+                    } else {
+
+                        clawPickupRight.setPosition(0);
+                        clawPickupLeft.setPosition(1);
+
+                    }
+
+                }
+
+                lastAButton = true;
+
+            } else {
+
+                lastAButton = false;
+
+            }
+
+            if (rightButton) {
+
+                if (!lastBButton) {
+
+                    if (clawPickupRight.getPosition() == 0) {
+
+                        clawPickupRight.setPosition(1);
+
+                    } else {
+
+                        clawPickupRight.setPosition(0);
+
+                    }
+
+                }
+
+                lastBButton = true;
+
+            } else {
+
+                lastBButton = false;
+
+            }
+
+            if (leftButton) {
+
+                if (!lastXButton) {
+
+                    if (clawPickupLeft.getPosition() == 0) {
+
+                        clawPickupLeft.setPosition(1);
+
+                    } else {
+
+                        clawPickupLeft.setPosition(0);
+
+                    }
+
+                }
+
+                lastXButton = true;
+
+            } else {
+
+                lastXButton = false;
+
+            }
 
         }
 
@@ -304,7 +477,7 @@ public class AttachmentControl {
 
     public void extendArmMotorManual() {
 
-        if ((extendArmMotor.getCurrentPosition() > -10 && gamepad2.left_stick_y > 0) || (rotateArmMotor.getCurrentPosition() > -200 && extendArmMotor.getCurrentPosition() < -1200 && gamepad2.left_stick_y < 0) || (rotateArmMotor.getCurrentPosition() <= -200 && extendArmMotor.getCurrentPosition() < -2690 && gamepad2.left_stick_y < 0)) {
+        if ((extendArmMotor.getCurrentPosition() > -10 && gamepad2.left_stick_y > 0) || (extendArmMotor.getCurrentPosition() < -2690 && gamepad2.left_stick_y < 0)) {
 
             extendArmMotor.setPower(0);
 
@@ -313,25 +486,16 @@ public class AttachmentControl {
             extendArmMotor.setPower(gamepad2.left_stick_y);
 
         }
+
+        if (gamepad2.dpad_up) clawRotate.setPosition(1);
+        else if (gamepad2.dpad_down) clawRotate.setPosition(0);
         telemetryControl.addData("Extend Arm Position", extendArmMotor.getCurrentPosition());
 
     }
 
     public void rotateArmMotorManual() {
 
-        if ((bottomTouch.isPressed() && gamepad2.right_stick_y < 0) || (topTouch.isPressed() && gamepad2.right_stick_y > 0)) {
-
-            rotateArmMotor.setPower(0);
-
-        } else if (rotateArmMotor.getCurrentPosition() > -500){
-
-            rotateArmMotor.setPower(gamepad2.right_stick_y * 0.33);
-
-        } else {
-
-            rotateArmMotor.setPower(gamepad2.right_stick_y * 0.75);
-
-        }
+        setRotateArmMotor(gamepad2.right_stick_y);
         telemetryControl.addData("Rotate Arm Position", rotateArmMotor.getCurrentPosition());
 
     }
