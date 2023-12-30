@@ -5,7 +5,7 @@ import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Autonomous (name = "Blue Backstage Center Park", group = "Blue!")
+@Autonomous (name = "Blue Backstage Center Park")
 public class BlueBackstageCenterPark extends H2OLooAuto {
 
     @Override
@@ -18,15 +18,9 @@ public class BlueBackstageCenterPark extends H2OLooAuto {
     @Override
     public void opModePeriodic() {
 
-        driveTrain.EncoderAutoMecanumDrive(26, 0, 0, 0.75, 3); //36, 0, 0, 0.75, 3
-        sleep(250);
-        driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.75, 1);
-        sleep(250);
-        driveTrain.EncoderAutoMecanumDrive(0,0, -90,0.75,1);
-        sleep(250);
+        driveTrain.EncoderAutoMecanumDrive(-26, 0, 0, 0.75, 3);
         driveTrain.EncoderAutoMecanumDrive(26, 0, 0, 0.75, 1);
-//        attachmentControl.intakeAutoWithPower(-0.20);
-        sleep(10000);
+        driveTrain.EncoderAutoMecanumDrive(0,36, 0,0.75,1);
 
     }
 

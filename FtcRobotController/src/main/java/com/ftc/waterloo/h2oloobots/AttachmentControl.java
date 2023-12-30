@@ -28,13 +28,19 @@ public class AttachmentControl {
     Servo droneServo;
     boolean firstStepCompleted = true;
     boolean lastAButton = false, lastBButton = false, lastXButton = false;
+    boolean isStartOfHang0 = true;
+    ElapsedTime hangTime = new ElapsedTime();
     public enum ArmPosition {
         LOW,
         MED,
         HIGH,
         PICKUP,
-        CARRY
+        CARRY,
+        HANG_UP,
+        HANG_LATCH
     }
+
+    public int hangStep = 0;
 
     ArmPosition armPosition = ArmPosition.CARRY;
 
@@ -52,13 +58,14 @@ public class AttachmentControl {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         droneServo = hardwareMap.servo.get("droneServo");
-        droneServo.scaleRange(0.35, 1);
-        droneServo.setPosition(1);
+        droneServo.scaleRange(0.949, 1);
+        droneServo.setPosition(0.88);
 
         hangMotor = hardwareMap.dcMotor.get("hangMotor");
         hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangServo = hardwareMap.servo.get("hangServo");
-        hangServo.scaleRange(0.49, 0.94);
+        hangServo.scaleRange(0, 0.35);
+        hangServo.setPosition(1);
 
         clawRotate = hardwareMap.servo.get("clawRotate");
         clawRotate.scaleRange(0.569, 0.968);
@@ -189,6 +196,18 @@ public class AttachmentControl {
             clawPickupRight.setPosition(0);
             clawPickupLeft.setPosition(1);
 
+        } else if (gamepad1.dpad_up) {
+
+            armPosition = ArmPosition.HANG_UP;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
+            clawRotate.setPosition(1);
+
+        } else if (gamepad1.dpad_down) {
+
+            armPosition = ArmPosition.HANG_LATCH;
+            firstStepCompleted = true;
+            clawRotate.setPosition(1);
+
         }
 
         switch (armPosition) {
@@ -230,6 +249,26 @@ public class AttachmentControl {
                 if (firstStepCompleted) {
                     rotateArmMotor.setTargetPosition(0);
                     extendArmMotor.setTargetPosition(0);
+                }
+                break;
+
+            case HANG_UP:
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(3163);
+                    extendArmMotor.setTargetPosition(-898);
+                }
+                break;
+
+            case HANG_LATCH:
+                if (isStartOfHang0) {
+                    extendArmMotor.setTargetPosition(-590);
+                    rotateArmMotor.setTargetPosition(3163);
+                    isStartOfHang0 = false;
+                }
+
+                if ((extendArmMotor.getCurrentPosition() < -580 && extendArmMotor.getCurrentPosition() > -600) && !isStartOfHang0) {
+                    rotateArmMotor.setTargetPosition(500);
+                    clawRotate.setPosition(0);
                 }
                 break;
         }
@@ -388,11 +427,11 @@ public class AttachmentControl {
 
         if (gamepad2.a) {
 
-            hangServo.setPosition(hangServo.getPosition() + 0.001);
+            hangServo.setPosition(hangServo.getPosition() + 0.005);
 
         } else if (gamepad2.b) {
 
-            hangServo.setPosition(hangServo.getPosition() - 0.001);
+            hangServo.setPosition(hangServo.getPosition() - 0.005);
 
         }
 
@@ -403,15 +442,11 @@ public class AttachmentControl {
 
     public void hangServoTeleOp() {
 
-        if (gamepad2.a) {
+        if (gamepad1.left_bumper) {
 
             if (!isGP2APressed) {
 
                 if (hangServo.getPosition() < 0.05) {
-
-                    hangServo.setPosition(0.832);
-
-                } else if (hangServo.getPosition() < 0.85) {
 
                     hangServo.setPosition(1);
 
@@ -432,12 +467,14 @@ public class AttachmentControl {
 
         }
 
+        telemetryControl.addData("Hang Servo Position", hangServo.getPosition());
+
     }
 
     public void droneManual() {
         double position = droneServo.getPosition();
         if (gamepad2.a) position += 0.005;
-        else if (gamepad2.b) position -= 0.05;
+        else if (gamepad2.b) position -= 0.005;
 
         if (position > 1) position = 1;
         if (position < 0) position = 0;
@@ -449,7 +486,7 @@ public class AttachmentControl {
 
     public void droneTeleOp() {
 
-        if (gamepad1.a) {
+        if (gamepad1.right_bumper) {
 
             if (!isAPressed) {
 
@@ -459,7 +496,7 @@ public class AttachmentControl {
 
                 } else {
 
-                    droneServo.setPosition(1);
+                    droneServo.setPosition(0.88);
 
                 }
 

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public abstract class H2OLooTeleOp extends LinearOpMode {
 
     public H2OLooTeleOp() {}
+    public CameraControl.Alliance alliance;
     public TelemetryControl telemetryControl;
 
     public DriveTrain driveTrain;
@@ -27,6 +28,13 @@ public abstract class H2OLooTeleOp extends LinearOpMode {
             this.opModePeriodic();
             telemetryControl.update();
         }
+
+    }
+
+    public void initCamera(CameraControl.Alliance alliance) {
+
+        this.alliance = alliance;
+        this.cameraControl = new CameraControl(hardwareMap, telemetryControl, this.alliance, gamepad1, gamepad2);
 
     }
 

@@ -3,6 +3,7 @@ package com.ftc.waterloo.h2oloobots;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -30,6 +31,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 public class CameraControl {
 
     TelemetryControl telemetryControl;
@@ -277,8 +279,8 @@ class RedPropPipeline extends OpenCvPipeline {
         // Hue values are half the real value
         Scalar upperBlue = new Scalar(139, 255, 180);
         Scalar lowerBlue = new Scalar(98, 50, 25);
-        Scalar upperRed = new Scalar(15, 255, 255);
-        Scalar lowerRed = new Scalar(0, 50, 25);
+        Scalar upperRed = new Scalar(20, 255, 255);
+        Scalar lowerRed = new Scalar(-5, 50, 75);
         Mat thresh = new Mat();
 
         // We'll get a black and white image. The white regions represent the regular stones.
