@@ -274,15 +274,7 @@ public class DriveTrain {
 
             case MECANUM:
 
-                if (attachmentControl.hangServo.getPosition() > 0.8) {
-
-                    speedMul = 0.25;
-
-                } else {
-
-                    speedMul = 0.75;
-
-                }
+                speedMul = 0.75;
                 this.MecanumTeleOp(FBInput * speedMul, LRInput * speedMul, pivotInput * speedMul);
                 break;
 

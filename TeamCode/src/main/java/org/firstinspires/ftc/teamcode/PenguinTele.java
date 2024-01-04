@@ -15,22 +15,79 @@ public class PenguinTele extends H2OLooTeleOp {
 
     boolean isAPressed = false;
 
+    enum dPad{
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    }
+
+    dPad last_dpad;
+
     @Override
     public void opModeInit() {
 
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
+        last_dpad = dPad.RIGHT;
 
     }
 
     @Override
     public void opModePeriodic() {
 
-        driveTrain.teleOpDrive(
-                gamepad1.left_stick_y,
-                gamepad1.left_stick_x,
-                gamepad1.right_stick_x,
-                attachmentControl
-        );
+        if (last_dpad == dPad.RIGHT)
+        {
+            driveTrain.teleOpDrive(
+                    -gamepad1.left_stick_x,
+                    gamepad1.left_stick_y,
+                    gamepad1.right_stick_x,
+                    attachmentControl
+            );
+        }
+        if (last_dpad == dPad.LEFT)
+        {
+            driveTrain.teleOpDrive(
+                    gamepad1.left_stick_x,
+                    -gamepad1.left_stick_y,
+                    gamepad1.right_stick_x,
+                    attachmentControl
+            );
+        }
+        if (last_dpad == dPad.UP)
+        {
+            driveTrain.teleOpDrive(
+                    gamepad1.left_stick_y,
+                    gamepad1.left_stick_x,
+                    gamepad1.right_stick_x,
+                    attachmentControl
+            );
+        }
+        if (last_dpad == dPad.DOWN)
+        {
+            driveTrain.teleOpDrive(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    gamepad1.right_stick_x,
+                    attachmentControl
+            );
+        }
+
+        if (gamepad1.dpad_right)
+        {
+            last_dpad = dPad.RIGHT;
+        }
+        if (gamepad1.dpad_left)
+        {
+            last_dpad = dPad.LEFT;
+        }
+        if (gamepad1.dpad_up)
+        {
+            last_dpad = dPad.UP;
+        }
+        if (gamepad1.dpad_down)
+        {
+            last_dpad = dPad.DOWN;
+        }
 
         attachmentControl.droneTeleOp();
         attachmentControl.hangServoTeleOp();

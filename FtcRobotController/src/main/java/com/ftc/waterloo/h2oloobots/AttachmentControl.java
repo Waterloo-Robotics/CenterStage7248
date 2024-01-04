@@ -196,13 +196,13 @@ public class AttachmentControl {
             clawPickupRight.setPosition(0);
             clawPickupLeft.setPosition(1);
 
-        } else if (gamepad1.dpad_up) {
+        } else if (gamepad2.left_bumper) {
 
             armPosition = ArmPosition.HANG_UP;
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
             clawRotate.setPosition(1);
 
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad2.right_bumper) {
 
             armPosition = ArmPosition.HANG_LATCH;
             firstStepCompleted = true;
@@ -442,7 +442,7 @@ public class AttachmentControl {
 
     public void hangServoTeleOp() {
 
-        if (gamepad1.left_bumper) {
+        if (gamepad2.left_trigger > 0.1) {
 
             if (!isGP2APressed) {
 
