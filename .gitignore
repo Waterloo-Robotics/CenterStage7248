@@ -22,7 +22,7 @@ out/
 # Gradle files
 .gradle/
 build/
-.idea/misc.xml
+.idea/
 
 # Local configuration file (sdk path, etc)
 local.properties
