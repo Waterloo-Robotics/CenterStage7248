@@ -92,7 +92,7 @@ public class CameraControl {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName webcamName = null;
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"); // put your camera's name here
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 2"); // put your camera's name here
         openCvWebcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         bluePropPipeline = new BluePropPipeline(width);
         redPropPipeline = new RedPropPipeline(width);
@@ -218,6 +218,51 @@ public class CameraControl {
             double  yawError        = desiredTag.ftcPose.yaw;
 
             // Use the speed and turn "gains" to calculate how we want the robot to move.
+            drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+            turn   = -Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
+            strafe = -Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+
+            telemetryControl.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+        } else {
+
+            // drive using manual POV Joystick mode.  Slow things down to make the robot more controlable.
+            drive  = gamepad1.left_stick_y;
+            strafe = gamepad1.left_stick_x;
+            turn   = gamepad1.right_stick_x;
+            telemetryControl.addData("Manual","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+        }
+
+        // Apply desired axes motions to the drivetrain.
+        driveTrain.teleOpDrive(drive, strafe, turn, attachmentControl);
+        ElapsedTime time = new ElapsedTime();
+        time.reset();
+        while (time.seconds() < 0.01);
+    }
+
+    public void followAprilTagAuto(DriveTrain driveTrain) {
+        targetFound = false;
+        desiredTag  = null;
+
+        // Step through the list of detected tags and look for a matching tag
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        for (AprilTagDetection detection : currentDetections) {
+            if ((detection.metadata != null)
+                    && ((DESIRED_TAG_ID <= 0) || (detection.id == DESIRED_TAG_ID))  ){
+                targetFound = true;
+                desiredTag = detection;
+                break;  // don't look any further.
+            }
+        }
+
+        // If Left Bumper is being pressed, AND we have found the desired target, Drive to target Automatically .
+        if (targetFound) {
+
+            // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
+            double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+            double  headingError    = desiredTag.ftcPose.bearing;
+            double  yawError        = desiredTag.ftcPose.yaw;
+
+            // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = -Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
             strafe = -Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
@@ -233,7 +278,7 @@ public class CameraControl {
         }
 
         // Apply desired axes motions to the drivetrain.
-        driveTrain.teleOpDrive(drive, strafe, turn, attachmentControl);
+        driveTrain.MecanumTeleOp(drive, strafe, turn);
         ElapsedTime time = new ElapsedTime();
         time.reset();
         while (time.seconds() < 0.01);
@@ -279,8 +324,8 @@ class RedPropPipeline extends OpenCvPipeline {
         // Hue values are half the real value
         Scalar upperBlue = new Scalar(139, 255, 180);
         Scalar lowerBlue = new Scalar(98, 50, 25);
-        Scalar upperRed = new Scalar(20, 255, 255);
-        Scalar lowerRed = new Scalar(-5, 50, 75);
+        Scalar upperRed = new Scalar(15, 255, 255);
+        Scalar lowerRed = new Scalar(0, 50, 25);
         Mat thresh = new Mat();
 
         // We'll get a black and white image. The white regions represent the regular stones.
@@ -332,7 +377,7 @@ class RedPropPipeline extends OpenCvPipeline {
 
             // Iterate and check whether the bounding boxes
             // cover left and/or right side of the image
-            double left_x = 0.25 * width;
+            double left_x = 0.225 * width;
             double right_x = 0.825 * width;
             boolean left = false; // true if regular stone found on the left side
             boolean right = false; // "" "" on the right side

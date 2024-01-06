@@ -20,7 +20,8 @@ public class AttachmentControl {
     TelemetryControl telemetryControl;
     Gamepad gamepad1, gamepad2;
 
-    DcMotorEx extendArmMotor, rotateArmMotor;
+    public DcMotorEx extendArmMotor;
+    public DcMotorEx rotateArmMotor;
     ElapsedTime extendTime = new ElapsedTime();
     boolean isExtendTimeStarted = true;
     Servo clawRotate;
@@ -316,6 +317,30 @@ public class AttachmentControl {
         telemetryControl.addData("Rotate Arm Is Busy", rotateArmMotor.isBusy());
         telemetryControl.addData("Desired Position", armPosition);
         telemetryControl.addData("Is First Step Completed", firstStepCompleted);
+
+    }
+
+    public void intermediateAuto() {
+
+        extendArmMotor.setTargetPosition(0);
+        rotateArmMotor.setTargetPosition(500);
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        extendArmMotor.setPower(1);
+        rotateArmMotor.setPower(1);
+
+    }
+
+    public void scoreAuto() {
+
+        rotateArmMotor.setTargetPosition(4391);
+        extendArmMotor.setTargetPosition(-2683);
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        extendArmMotor.setPower(1);
+        rotateArmMotor.setPower(1);
 
     }
 
