@@ -89,7 +89,7 @@ public class PenguinTele extends H2OLooTeleOp {
             last_dpad = dPad.DOWN;
         }
 
-        attachmentControl.droneTeleOp();
+        attachmentControl.droneTeleOp(); // Driver 1 (Gamepad 1) Right bumper.
         attachmentControl.hangServoTeleOp();
         attachmentControl.hangMotorManual();
         attachmentControl.armTeleOp();
