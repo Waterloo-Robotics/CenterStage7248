@@ -60,7 +60,7 @@ public class RedBackstageCenterPark extends H2OLooAuto {
                 driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.2, 3);
                 //strafe left and then backwards to avoid the purple pixel just delivered. 5" strafe left @ 50% power.
                 driveTrain.EncoderAutoMecanumDrive(0, -5, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-10, , 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.5, 3);
                 //strafe right a little bit to line the robot/claw to the RIGHT April Tag ID. 3" strafe right @ 20% power.
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.2, 3);
                 break;
