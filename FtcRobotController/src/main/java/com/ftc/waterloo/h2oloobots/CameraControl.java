@@ -239,6 +239,7 @@ public class CameraControl {
         while (time.seconds() < 0.01);
     }
 
+
     public void followAprilTagAuto(DriveTrain driveTrain) {
         targetFound = false;
         desiredTag  = null;

@@ -52,6 +52,7 @@ public class AttachmentControl {
     boolean isAPressed = false;
 
     TouchSensor bottomTouch, topTouch;
+    TouchSensor extendTouch;
 
     public AttachmentControl(HardwareMap hardwareMap, TelemetryControl telemetryControl, Gamepad gamepad1, Gamepad gamepad2) {
 
@@ -77,6 +78,10 @@ public class AttachmentControl {
         clawPickupRight = hardwareMap.servo.get("clawPickupRight");
         clawPickupRight.scaleRange(0.64, 0.86);
         clawPickupRight.setPosition(1);
+
+        bottomTouch = hardwareMap.touchSensor.get("bottomTouch");
+        topTouch = hardwareMap.touchSensor.get("topTouch");
+        extendTouch = hardwareMap.touchSensor.get("extendTouch");
         /*
         Map the hardware configuration to software. Best practice is to use the same name between HW configuration and SW.
         * Best practice is to default zero power behavior to BRAKE (instead of FLOAT)
@@ -85,19 +90,20 @@ public class AttachmentControl {
         */
         extendArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("extendArmMotor");
         extendArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        while (!extendTouch.isPressed()) extendArmMotor.setPower(1);
+        extendArmMotor.setPower(0);
         extendArmMotor.setTargetPosition(0);
         extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendArmMotor.setTargetPositionTolerance(30);
         rotateArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("rotateArmMotor");
         rotateArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        while (!bottomTouch.isPressed()) rotateArmMotor.setPower(-1);
+        rotateArmMotor.setPower(0);
         rotateArmMotor.setTargetPosition(0);
         rotateArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rotateArmMotor.setTargetPositionTolerance(70);
-
-        bottomTouch = hardwareMap.touchSensor.get("bottomTouch");
-        topTouch = hardwareMap.touchSensor.get("topTouch");
 
     }
 
@@ -288,25 +294,7 @@ public class AttachmentControl {
         }
 
         this.setRotateArmMotorEncoder();
-        /**The comments here are possibly useful for preventing the power drain caused when the extend motor tries to drive into its base.
-         * Not sure if it's necessary yet.*/
-//        if (armPosition == ArmPosition.CARRY && Math.abs(extendArmMotor.getVelocity()) < 100 && extendArmMotor.getCurrentPosition() > -80 && !isExtendTimeStarted) {
-//
-//            extendTime.reset();
-//            isExtendTimeStarted = true;
-//
-//        } else if (armPosition != ArmPosition.CARRY || extendArmMotor.getCurrentPosition() <= -80) isExtendTimeStarted = false;
-        if (!extendArmMotor.isBusy() && armPosition == ArmPosition.CARRY && Math.abs(extendArmMotor.getVelocity()) < 100 /*&& extendTime.seconds() > 1*/) {
-
-            extendArmMotor.setPower(0);
-            extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        } else {
-
-            extendArmMotor.setPower(1);
-
-        }
+        extendArmMotor.setPower(1);
 
         telemetryControl.addData("Extend Arm Current Position", extendArmMotor.getCurrentPosition());
         telemetryControl.addData("Extend Arm Target Position", extendArmMotor.getTargetPosition());
@@ -334,13 +322,20 @@ public class AttachmentControl {
 
     public void scoreAuto() {
 
-        rotateArmMotor.setTargetPosition(4391);
-        extendArmMotor.setTargetPosition(-2683);
+        rotateArmMotor.setTargetPosition(4900);
+        extendArmMotor.setTargetPosition(-1225);
         extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         extendArmMotor.setPower(1);
         rotateArmMotor.setPower(1);
+
+    }
+
+    public void dropYellowAuto() {
+
+        clawPickupRight.setPosition(0);
+        clawPickupLeft.setPosition(1);
 
     }
 
@@ -566,6 +561,7 @@ public class AttachmentControl {
 
         telemetryControl.addData("Bottom Touch", bottomTouch.isPressed());
         telemetryControl.addData("Top Touch", topTouch.isPressed());
+        telemetryControl.addData("Extend Touch", extendTouch.isPressed());
 
     }
 
