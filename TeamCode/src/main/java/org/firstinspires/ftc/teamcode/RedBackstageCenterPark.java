@@ -26,54 +26,49 @@ public class RedBackstageCenterPark extends H2OLooAuto {
 
         switch (location) {
 
+            // Webcam 2 (robot left side) is facing the prop with the purple pixel in the push slot.
             case LEFT:
+                /*
+                1. Perform a smooth/swing 50° CCW/left turn as the robot strafe left for 29" at 50% speed.
+                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
+                3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
+                4. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
+                5. Drive/Reverse straight 12" to get the rear robot frame on the backstage park/score zone line.
+                ## The robot is in position to score.
+                 */
                 driveTrain.EncoderAutoMecanumDrive(0, -29, -50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(18, 0, 50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(-12, 0, 0, 0.5, 3);
-                // Webcam 2 (robot left side) is facing the prop with the purple pixel in the push slot.
-//                // drive forward (strafe left) to the center of the second tile. 20" @ 50% power.
-//                driveTrain.EncoderAutoMecanumDrive(0, -20, 0, 0.5, 3);
-//                // spin turn 90° CCW to have the purple pixel facing the team prop. -90 @ 20% power
-//                driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.2, 3);
-//                // drive forward (strafe left) to the LEFT "spike mark" to deliver the purple pixel. 3" @ 50% power
-//                driveTrain.EncoderAutoMecanumDrive(0, -3, 0, 0.5, 3);
-//                // reverse (strafe right) from the "spike mark" location to clear the purple pixel from the robot push frame. 5" strafe right @ 50% power.
-//                driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.5, 3);
-//                // spin another 90°CCW to have the rear side (scoring side) facing the backdrop. -90 @ 20% power.
-//                driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.2, 3);
-//                //strafe right a little bit to line the robot/claw to the LEFT April Tag ID. 3" strafe right @ 20% power.
-//                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.2, 3);
                 break;
             case RIGHT:
-                // Webcam 2 (robot left side) is facing the prop with the purple pixel in the push slot.
-                // drive forward (strafe left) to the center of the second tile. 20" @ 50% power.
-                driveTrain.EncoderAutoMecanumDrive(0, -20, 0, 0.5, 3);
-                // spin turn 90° CW to have the purple pixel facing the team prop. 90 @ 20% power
-                driveTrain.EncoderAutoMecanumDrive(0, 0, 90, 0.2, 3);
-                // drive forward (strafe left) to the RIGHT "spike mark" to deliver the purple pixel. 3" @ 50% power
-                driveTrain.EncoderAutoMecanumDrive(0, -3, 0, 0.5, 3);
-                // reverse (strafe right) from the "spike mark" location to clear the purple pixel from the robot push frame. 5" strafe right @ 50% power.
-                driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.5, 3);
-                // spin another 90°CCW to have the rear side (scoring side) facing the backdrop. -90 @ 20% power.
-                driveTrain.EncoderAutoMecanumDrive(0, 0, -90, 0.2, 3);
-                //strafe left and then backwards to avoid the purple pixel just delivered. 5" strafe left @ 50% power.
-                driveTrain.EncoderAutoMecanumDrive(0, -5, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.5, 3);
-                //strafe right a little bit to line the robot/claw to the RIGHT April Tag ID. 3" strafe right @ 20% power.
-                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.2, 3);
+                /*
+                1. Perform a smooth/swing 50° CW/right turn as the robot strafe left for 29" at 50% speed.
+                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
+                3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
+                4. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
+                5. Drive/Reverse straight 6" to get the rear robot frame on the backstage park/score zone line.
+                ## The robot is in position to score.
+                 */
+                driveTrain.EncoderAutoMecanumDrive(0, -29, 50, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(18, 0, -50, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.5, 3);
                 break;
             case CENTER:
-                // Webcam 2 (robot left side) is facing the prop with the purple pixel in the push slot.
-                // drive forward (strafe left) to deliver the purple pixel to the CENTER "spike mark". 26" @ 50% power.
+                /*
+                1. Strafe left 26" at 50% speed.
+                2. Strafe right 5" (at 50% speed) to release/leave the purple pixel at the left spike mark.
+                3. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
+                4. Drive/Reverse straight 6" to get the rear robot frame on the backstage park/score zone line.
+                ## The robot is in position to score.
+                 */
                 driveTrain.EncoderAutoMecanumDrive(0, -26, 0, 0.5, 3);
-                // reverse (strafe right) from the "spike mark" location to clear the purple pixel from the robot push frame. 5" strafe right @ 50% power.
                 driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.5, 3);
-                // spin another 180°CCW to have the rear side (scoring side) facing the backdrop. -180 @ 20% power.
-                driveTrain.EncoderAutoMecanumDrive(0, 0, -180, 0.2, 3);
-                //strafe left a little bit to line the robot/claw to the CENTER April Tag ID. 3" strafe right @ 20% power.
-                driveTrain.EncoderAutoMecanumDrive(0, -3, 0, 0.2, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.5, 3);
                 break;
             case NONE:
                 break;
@@ -93,7 +88,7 @@ public class RedBackstageCenterPark extends H2OLooAuto {
         attachmentControl.dropYellowAuto();
         sleep(1000);
 
-        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy()); //What is this for?
+        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy()); // Keep robot operating until all motor functions are completed.
 
     }
 
