@@ -60,8 +60,8 @@ public class AttachmentControl {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         droneServo = hardwareMap.servo.get("droneServo");
-        droneServo.scaleRange(0.949, 1);
-        droneServo.setPosition(0.88);
+        droneServo.scaleRange(0.86, 0.9);
+        droneServo.setPosition(0);
 
         hangMotor = hardwareMap.dcMotor.get("hangMotor");
         hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -493,8 +493,8 @@ public class AttachmentControl {
 
     public void droneManual() {
         double position = droneServo.getPosition();
-        if (gamepad2.a) position += 0.005;
-        else if (gamepad2.b) position -= 0.005;
+        if (gamepad2.a) position += 0.001;
+        else if (gamepad2.b) position -= 0.001;
 
         if (position > 1) position = 1;
         if (position < 0) position = 0;
