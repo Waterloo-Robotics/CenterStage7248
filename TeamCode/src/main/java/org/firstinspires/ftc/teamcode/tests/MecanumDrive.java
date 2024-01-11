@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.ftc.waterloo.h2oloobots.CameraControl;
+import com.ftc.waterloo.h2oloobots.TelemetryControl;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -22,7 +24,11 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +37,10 @@ import java.util.concurrent.TimeUnit;
 
 //Mec drive with april tag detection and auto drive use left bumper
 @Disabled
+@Config
 @TeleOp(name = "JBot TeleOp", group = "Patrick's dumb stuff")
 public class MecanumDrive extends LinearOpMode {
+    TelemetryControl telemetryControl;
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
 
@@ -46,6 +54,11 @@ public class MecanumDrive extends LinearOpMode {
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    static final int STREAM_WIDTH = 640; // modify for your camera
+    static final int STREAM_HEIGHT = 480; // modify for your camera
+    int width = 640;
+    int height = 480;
+    OpenCvWebcam openCvWebcam;
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -53,13 +66,14 @@ public class MecanumDrive extends LinearOpMode {
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
-    private static final int DESIRED_TAG_ID = 2;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    public static int DESIRED_TAG_ID = 9;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     @Override public void runOpMode()
     {
+//        RedPropPipeline redPropPipeline = new RedPropPipeline(640);
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         double  drive           = 0;        // Desired forward power/speed (-1 to +1)
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
@@ -67,6 +81,26 @@ public class MecanumDrive extends LinearOpMode {
 
         // Initialize the Apriltag Detection process
         initAprilTag();
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        WebcamName webcamName = null;
+//        webcamName = hardwareMap.get(WebcamName.class, "Webcam 2"); // put your camera's name here
+//        openCvWebcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+//        openCvWebcam.setPipeline(redPropPipeline);
+//        openCvWebcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+//        {
+//            @Override
+//            public void onOpened()
+//            {
+//                openCvWebcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//                telemetryControl.addData("Camera Failed","");
+//                telemetryControl.update();
+//            }
+//        });
+        telemetryControl = new TelemetryControl(telemetry);
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must match the names assigned during the robot configuration.
@@ -91,14 +125,17 @@ public class MecanumDrive extends LinearOpMode {
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+//        telemetryControl.startCameraStream(openCvWebcam, 60);
         waitForStart();
 
         while (opModeIsActive())
         {
             targetFound = false;
             desiredTag  = null;
+//            telemetryControl.startCameraStream(openCvWebcam, 60);
+//            telemetryControl.update();
 
-            // Step through the list of detected tags and look for a matching tag
+//             Step through the list of detected tags and look for a matching tag
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
                 // Look to see if we have size info on this tag.
@@ -338,7 +375,7 @@ class RedPropPipeline extends OpenCvPipeline {
                 }
 
             }
-//        Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));
+//        Imgproc.drawContours(thresh, contours, -1, new Scalar(255, 0, 0));
             Imgproc.drawContours(input, contours, maxValIdx, new Scalar(255, 0, 0));
 
             MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
