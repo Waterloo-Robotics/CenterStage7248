@@ -53,9 +53,9 @@ public class RedBackstageCenterPark extends H2OLooAuto {
                  */
                 driveTrain.EncoderAutoMecanumDrive(0, -29, 50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(18, 0, -50, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(14, 0, -50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-11, 0, 0, 0.5, 3);
                 break;
             case CENTER:
                 /*
@@ -65,10 +65,11 @@ public class RedBackstageCenterPark extends H2OLooAuto {
                 4. Drive/Reverse straight 6" to get the rear robot frame on the backstage park/score zone line.
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -26, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -31, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-23, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
                 break;
             case NONE:
                 break;
