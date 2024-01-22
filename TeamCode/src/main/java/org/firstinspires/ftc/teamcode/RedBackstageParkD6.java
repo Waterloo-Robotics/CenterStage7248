@@ -4,10 +4,9 @@ import com.ftc.waterloo.h2oloobots.CameraControl;
 import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous (name = "Red Backstage Center Park")
-public class RedBackstageCenterPark extends H2OLooAuto {
+@Autonomous (name = "Red Backstage Park D6")
+public class RedBackstageParkD6 extends H2OLooAuto {
 
     CameraControl.PropLocation location;
 

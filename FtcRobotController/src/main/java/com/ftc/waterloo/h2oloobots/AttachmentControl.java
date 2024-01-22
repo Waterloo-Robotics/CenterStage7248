@@ -322,7 +322,7 @@ public class AttachmentControl {
 
     public void scoreAuto() {
 
-        rotateArmMotor.setTargetPosition(4900);
+        rotateArmMotor.setTargetPosition(5100);//low line is at 4900. We want to go lower.
         extendArmMotor.setTargetPosition(-1225);
         extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -332,6 +332,19 @@ public class AttachmentControl {
 
     }
 
+    public void resetArmAuto() {
+
+        clawPickupRight.setPosition(1);
+        clawPickupLeft.setPosition(0);
+        rotateArmMotor.setTargetPosition(0);
+        extendArmMotor.setTargetPosition(0);
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        extendArmMotor.setPower(1);
+        rotateArmMotor.setPower(1);
+
+    }
     public void dropYellowAuto() {
 
         clawPickupRight.setPosition(0);
