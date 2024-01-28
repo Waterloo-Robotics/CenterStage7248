@@ -16,6 +16,13 @@ public class RedBackstageParkD6 extends H2OLooAuto {
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
         initCamera(CameraControl.Alliance.RED);
 
+        while (opModeInInit()) {
+
+            telemetryControl.addData("Prop Location", cameraControl.getLocation());
+            telemetryControl.update();
+
+        }
+
     }
 
     @Override

@@ -16,6 +16,13 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
         initCamera(CameraControl.Alliance.BLUE);
 
+        while (opModeInInit()) {
+
+            telemetryControl.addData("Prop Location", cameraControl.getLocation());
+            telemetryControl.update();
+
+        }
+
     }
 
     @Override
@@ -31,36 +38,33 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
                 1. Perform a smooth/swing 50° CCW/right turn as the robot strafe left for 29" at 50% speed.
                 2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
                 3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
-                4. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
-                5. Drive/Reverse straight 9" to get the rear robot frame on the backstage park/score zone line.
-                6. Strafe left 3" to align to Left AprilTag
+                4. Perform a point turn 100° CCW to align the camera to AprilTag or robot claw in front of the left AprilTag.
+                5. Drive/Reverse straight 19" to get the rear robot frame on the backstage park/score zone line.
+                6. Strafe right 4" to align to Right AprilTag
                 ## The robot is in position to score.
                  */
                 driveTrain.EncoderAutoMecanumDrive(0, -29, 50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(-18, 0, 50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, -100, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0,4,0,0.5,3);
                 break;
             case CENTER:
                 /*
                 1. Strafe left 33" at 50% speed.
-                2. Strafe right 7" (at 50% speed) to release/leave the purple pixel at the left spike mark.
-                3. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
-                4. Drive/Reverse straight 21" to get the rear robot frame on the backstage park/score zone line.
-                5. Strafe right 6" to align to Left AprilTag
+                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
+                3. Drive/Reverse straight 23" to get the rear robot frame on the backstage park/score zone line.
                 ## The robot is in position to score.
                  */
                 driveTrain.EncoderAutoMecanumDrive(0, -33, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.5, 3);
-//                driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(-23, 0, 0, 0.5, 3);
-//                driveTrain.EncoderAutoMecanumDrive(0, 6, 0, 0.5, 3);
                 break;
             case LEFT:
                 /*
-                1. Perform a smooth/swing 50° CW/right turn as the robot strafe left for 29" at 50% speed.
+                1. Reverse by 2" to ensure we clear the rigging while making the turns.
+                2. Perform a smooth/swing 50° CW/right turn as the robot strafe left for 29" at 50% speed.
                 2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
                 3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
                 4. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
@@ -68,12 +72,12 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
                 6. Strafe right 2" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -29, 50, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-2, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -26, -50, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(14, 0, -50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-14, 0, 48, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(-8, 0, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0,2,0,0.5,3);
+                driveTrain.EncoderAutoMecanumDrive(0,-8,0,0.5,3);
                 break;
             case NONE:
                 break;
@@ -87,11 +91,12 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
         attachmentControl.scoreAuto();
         // Waits until arm gets in position before executing the next step.
         while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy());
+        sleep(250);
         // Still need to move the robot backwards to land the claw onto the backdrop (slowly).
         driveTrain.EncoderAutoMecanumDrive(-3, 0, 0, 0.2, 3);
         // Still need to release the claw to drop the yellow pixel. Need to create separate function to open claw or add into scoreAuto.
         attachmentControl.dropYellowAuto();
-        sleep(250);
+        sleep(500);
         attachmentControl.resetArmAuto();
         sleep(1000);
 
@@ -104,24 +109,24 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -18, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -16, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
                 break;
             case CENTER:
                 /*
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -29, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -25, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
                 break;
             case LEFT:
                 /*
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, 36, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -34, 0, 0.8, 3);
+               driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
                 break;
             case NONE:
                 break;
