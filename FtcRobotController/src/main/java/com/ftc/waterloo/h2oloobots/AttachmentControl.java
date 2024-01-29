@@ -90,15 +90,16 @@ public class AttachmentControl {
         */
         extendArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("extendArmMotor");
         extendArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        while (!extendTouch.isPressed()) extendArmMotor.setPower(1);
-        extendArmMotor.setPower(0);
+        while (!extendTouch.isPressed()) extendArmMotor.setPower(1); //When class is initialize, arm extension retract to touch sensor to set position 0.
+        extendArmMotor.setPower(0); //kill power to motor because arm has fully retracted.
         extendArmMotor.setTargetPosition(0);
-        extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extendArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extendArmMotor.setTargetPositionTolerance(30);
+        extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //the current encoder reading is set to position 0.
+        extendArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  //run motor without internal PID for velocity control.
+        extendArmMotor.setTargetPositionTolerance(30); //set current encoder tolerance to 30 encoder counts... don't know limit or best practice.
+
         rotateArmMotor = (DcMotorEx) hardwareMap.dcMotor.get("rotateArmMotor");
         rotateArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        while (!bottomTouch.isPressed()) rotateArmMotor.setPower(-1);
+        while (!bottomTouch.isPressed()) rotateArmMotor.setPower(-1); //When class is initialize, rotate arm until depress bottom touch sensor to set position 0.
         rotateArmMotor.setPower(0);
         rotateArmMotor.setTargetPosition(0);
         rotateArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -504,22 +505,9 @@ public class AttachmentControl {
 
     }
 
-    public void droneManual() {
-        double position = droneServo.getPosition();
-        if (gamepad2.a) position += 0.001;
-        else if (gamepad2.b) position -= 0.001;
-
-        if (position > 1) position = 1;
-        if (position < 0) position = 0;
-        droneServo.setPosition(position);
-
-        telemetryControl.addData("Drone Servo Position", droneServo.getPosition());
-
-    }
-
     public void droneTeleOp() {
 
-        if (gamepad1.right_bumper) {
+        if (gamepad1.right_trigger) {
 
             if (!isAPressed) {
 

@@ -11,10 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Madagas Tele", group = "!")
 public class PenguinTele extends H2OLooTeleOp {
 
-    Servo servo1;
-// trying github desktop
-    boolean isAPressed = false;
-
     enum dPad{
         RIGHT,
         LEFT,
@@ -89,11 +85,11 @@ public class PenguinTele extends H2OLooTeleOp {
             last_dpad = dPad.DOWN;
         }
 
-        attachmentControl.droneTeleOp(); // Driver 1 (Gamepad 1) Right bumper.
+        attachmentControl.droneTeleOp();
         attachmentControl.hangServoTeleOp();
         attachmentControl.hangMotorManual();
         attachmentControl.armTeleOp();
-        attachmentControl.clawPickupTeleOp(gamepad1.x, gamepad1.b, gamepad1.a);
+        attachmentControl.clawPickupTeleOp(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.a);
 
     }
 

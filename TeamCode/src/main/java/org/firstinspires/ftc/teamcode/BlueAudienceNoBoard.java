@@ -4,10 +4,9 @@ import com.ftc.waterloo.h2oloobots.CameraControl;
 import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous (name = "Red Backstage Center Park")
-public class RedBackstageCenterPark extends H2OLooAuto {
+@Autonomous (name = "Blue Audience No Board")
+public class BlueAudienceNoBoard extends H2OLooAuto {
 
     CameraControl.PropLocation location;
 
@@ -15,7 +14,14 @@ public class RedBackstageCenterPark extends H2OLooAuto {
     public void opModeInit() {
 
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
-        initCamera(CameraControl.Alliance.RED);
+        initCamera(CameraControl.Alliance.BLUE);
+
+        while (opModeInInit()) {
+
+            telemetryControl.addData("Prop Location", cameraControl.getLocation());
+            telemetryControl.update();
+
+        }
 
     }
 
@@ -80,56 +86,57 @@ public class RedBackstageCenterPark extends H2OLooAuto {
                 break;
 
         }
-        // Rotate scoring arm to intermediate scoring position. Arm not extended to reduce momentum and keep robot stable.
-        attachmentControl.intermediateAuto();
-        // Wait for robot to stabilize from the rotating arm momentum.
-        sleep(250);
-        // Extend scoring to reach the backdrop.
-        attachmentControl.scoreAuto();
-        // Waits until arm gets in position before executing the next step.
-        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy());
-        // Still need to move the robot backwards to land the claw onto the backdrop (slowly).
-        driveTrain.EncoderAutoMecanumDrive(-3, 0, 0, 0.2, 3);
-        // Still need to release the claw to drop the yellow pixel. Need to create separate function to open claw or add into scoreAuto.
-        attachmentControl.dropYellowAuto();
-        sleep(250);
-        attachmentControl.resetArmAuto();
-        sleep(1000);
-
-        /*
-        Parking path case statements.
-         */
-        switch (location) {
-            case LEFT:
-                /*
-                1. Strafe right x" (at 80% speed) to clear the backdrop.
-                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
-                 */
-                driveTrain.EncoderAutoMecanumDrive(0, 20, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
-                break;
-            case CENTER:
-                /*
-                1. Strafe right x" (at 80% speed) to clear the backdrop.
-                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
-                 */
-                driveTrain.EncoderAutoMecanumDrive(0, 30, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
-                break;
-            case RIGHT:
-                /*
-                1. Strafe right x" (at 80% speed) to clear the backdrop.
-                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
-                 */
-                driveTrain.EncoderAutoMecanumDrive(0, 36, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-19, 0, 0, 0.8, 3);
-                break;
-            case NONE:
-                break;
-
-        }
-
-        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy()); // Keep robot operating until all motor functions are completed.
+//        // Rotate scoring arm to intermediate scoring position. Arm not extended to reduce momentum and keep robot stable.
+//        attachmentControl.intermediateAuto();
+//        // Wait for robot to stabilize from the rotating arm momentum.
+//        sleep(250);
+//        // Extend scoring to reach the backdrop.
+//        attachmentControl.scoreAuto();
+//        // Waits until arm gets in position before executing the next step.
+//        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy());
+//        sleep(250);
+//        // Still need to move the robot backwards to land the claw onto the backdrop (slowly).
+//        driveTrain.EncoderAutoMecanumDrive(-3, 0, 0, 0.2, 3);
+//        // Still need to release the claw to drop the yellow pixel. Need to create separate function to open claw or add into scoreAuto.
+//        attachmentControl.dropYellowAuto();
+//        sleep(500);
+//        attachmentControl.resetArmAuto();
+//        sleep(1000);
+//
+//        /*
+//        Parking path case statements.
+//         */
+//        switch (location) {
+//            case RIGHT:
+//                /*
+//                1. Strafe right x" (at 80% speed) to clear the backdrop.
+//                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
+//                 */
+//                driveTrain.EncoderAutoMecanumDrive(0, -16, 0, 0.8, 3);
+//                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
+//                break;
+//            case CENTER:
+//                /*
+//                1. Strafe right x" (at 80% speed) to clear the backdrop.
+//                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
+//                 */
+//                driveTrain.EncoderAutoMecanumDrive(0, -25, 0, 0.8, 3);
+//                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
+//                break;
+//            case LEFT:
+//                /*
+//                1. Strafe right x" (at 80% speed) to clear the backdrop.
+//                2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
+//                 */
+//                driveTrain.EncoderAutoMecanumDrive(0, -34, 0, 0.8, 3);
+//               driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.8, 3);
+//                break;
+//            case NONE:
+//                break;
+//
+//        }
+//
+//        while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy()); // Keep robot operating until all motor functions are completed.
 
     }
 
