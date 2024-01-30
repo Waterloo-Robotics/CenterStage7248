@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@Disabled
+//@Disabled
 @Config
 @TeleOp
 public class AttachmentTest extends H2OLooTeleOp {
@@ -26,39 +26,23 @@ public class AttachmentTest extends H2OLooTeleOp {
     public void opModePeriodic() {
         cameraControl.setDesiredTagId(DESIRED_TAG_ID);
 
-        if (gamepad1.b) {
-
-            if (!isBPressed) {
-
-                attachmentControl.droneTeleOp(true);
-
-            }
-
-            isBPressed = true;
-
-        } else {
-
-            isBPressed = false;
-
-        }
-
-        attachmentControl.hangMotorManual();
-        attachmentControl.hangServoManual();
-
-
-        attachmentControl.hangServoManual();
-        attachmentControl.hangServoTeleOp();
-        attachmentControl.hangMotorManual(); // gamepad 2 left stick Y
-        attachmentControl.extendArmMotorManual(); // gamepad 2 right stick x
+//        attachmentControl.hangMotorManual();
+//        attachmentControl.hangServoManual();
+//
+//
+//        attachmentControl.hangServoManual();
+//        attachmentControl.hangServoTeleOp();
+//        attachmentControl.hangMotorManual(); // gamepad 2 left stick Y
+        attachmentControl.extendArmMotorManual(); // gamepad 2 left stick y
         attachmentControl.rotateArmMotorManual(); // gamepad 2 right stick y
-        attachmentControl.armTeleOp();
+//        attachmentControl.armTeleOp();
         attachmentControl.clawPickupTeleOp(gamepad2.x, gamepad2.b, gamepad2.a);
-        attachmentControl.clawRotateManual();
-        attachmentControl.touchSensorTelemetry();
-
-        cameraControl.followAprilTag(driveTrain, attachmentControl);
-        attachmentControl.droneTeleOp();
-        driveTrain.teleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, attachmentControl);
+        attachmentControl.clawRotateManual(); // gamepad 2 bumpers
+//        attachmentControl.touchSensorTelemetry();
+//
+//        cameraControl.followAprilTag(driveTrain, attachmentControl);
+//        attachmentControl.droneTeleOp();
+//        driveTrain.teleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, attachmentControl);
 
     }
 

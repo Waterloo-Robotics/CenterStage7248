@@ -5,7 +5,7 @@ import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous (name = "Blue Backstage Park C6")
+@Autonomous (name = "Red Audience No Board")
 public class RedAudienceNoBoard extends H2OLooAuto {
 
     CameraControl.PropLocation location;

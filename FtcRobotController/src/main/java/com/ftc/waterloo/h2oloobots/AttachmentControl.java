@@ -247,8 +247,8 @@ public class AttachmentControl {
             case PICKUP:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(0);
-                    extendArmMotor.setTargetPosition(-350);
+                    rotateArmMotor.setTargetPosition(67);
+                    extendArmMotor.setTargetPosition(-240);
                 }
                 break;
 
@@ -507,7 +507,7 @@ public class AttachmentControl {
 
     public void droneTeleOp() {
 
-        if (gamepad1.right_trigger) {
+        if (gamepad1.right_trigger>0.1) {
 
             if (!isAPressed) {
 
