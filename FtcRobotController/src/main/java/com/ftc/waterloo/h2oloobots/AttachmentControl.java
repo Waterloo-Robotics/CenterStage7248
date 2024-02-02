@@ -213,6 +213,7 @@ public class AttachmentControl {
         } else if (gamepad2.right_bumper) {
 
             armPosition = ArmPosition.HANG_LATCH;
+            isStartOfHang0 = true;
             firstStepCompleted = true;
             clawRotate.setPosition(1);
 
@@ -247,8 +248,8 @@ public class AttachmentControl {
             case PICKUP:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(67);
-                    extendArmMotor.setTargetPosition(-240);
+                    rotateArmMotor.setTargetPosition(1);
+                    extendArmMotor.setTargetPosition(-403);
                 }
                 break;
 

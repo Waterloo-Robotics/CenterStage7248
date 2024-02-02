@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.ftc.waterloo.h2oloobots.AttachmentControl;
 import com.ftc.waterloo.h2oloobots.CameraControl;
 import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous (name = "Blue Backstage Park C6")
 public class BlueBackstageParkC6 extends H2OLooAuto {
@@ -83,6 +85,7 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
                 break;
 
         }
+        attachmentControl = new AttachmentControl(hardwareMap, telemetryControl, gamepad1, gamepad2);
         // Rotate scoring arm to intermediate scoring position. Arm not extended to reduce momentum and keep robot stable.
         attachmentControl.intermediateAuto();
         // Wait for robot to stabilize from the rotating arm momentum.

@@ -39,7 +39,10 @@ public class DriveTrain {
     DriveTrainType driveTrainType = DriveTrainType.MECANUM;
 
     // defines drive motors for a 4 wheel drive
-    DcMotor fl, fr, bl, br;
+    public DcMotor fl;
+    public DcMotor fr;
+    public DcMotor bl;
+    public DcMotor br;
 
     // defines drive motors for a two wheel drive
     DcMotor left, right;
@@ -103,13 +106,11 @@ public class DriveTrain {
     public DriveTrain(
             HardwareMap hardwareMap,
             TelemetryControl telemetryControl,
-            AttachmentControl attachmentControl,
             DcMotor.ZeroPowerBehavior zeroPowerBehavior
     ) {
 
         this.hardwareMap = hardwareMap;
         this.telemetryControl = telemetryControl;
-        this.attachmentControl = attachmentControl;
         this.FourMotorInit(zeroPowerBehavior);
 
     }

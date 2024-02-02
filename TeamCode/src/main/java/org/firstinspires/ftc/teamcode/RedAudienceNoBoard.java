@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.ftc.waterloo.h2oloobots.AttachmentControl;
 import com.ftc.waterloo.h2oloobots.CameraControl;
 import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
@@ -14,7 +15,7 @@ public class RedAudienceNoBoard extends H2OLooAuto {
     public void opModeInit() {
 
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
-        initCamera(CameraControl.Alliance.BLUE);
+        initCamera(CameraControl.Alliance.RED);
 
         while (opModeInInit()) {
 
@@ -57,9 +58,12 @@ public class RedAudienceNoBoard extends H2OLooAuto {
                 3. Drive/Reverse straight 23" to get the rear robot frame on the backstage park/score zone line.
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -33, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -32, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-23, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-20, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -26, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(92, 0, 0, 0.5, 3);
+
                 break;
             case LEFT:
                 /*
@@ -83,6 +87,7 @@ public class RedAudienceNoBoard extends H2OLooAuto {
                 break;
 
         }
+//        attachmentControl = new AttachmentControl(hardwareMap, telemetryControl, gamepad1, gamepad2);
 //        // Rotate scoring arm to intermediate scoring position. Arm not extended to reduce momentum and keep robot stable.
 //        attachmentControl.intermediateAuto();
 //        // Wait for robot to stabilize from the rotating arm momentum.

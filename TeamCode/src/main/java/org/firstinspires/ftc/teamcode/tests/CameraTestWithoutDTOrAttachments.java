@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //@Disabled
-@Disabled
+//@Disabled
 @TeleOp
 public class CameraTestWithoutDTOrAttachments extends OpMode {
 

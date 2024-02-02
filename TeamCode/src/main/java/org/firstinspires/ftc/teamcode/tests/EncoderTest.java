@@ -1,22 +1,35 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooTeleOp;
+import com.ftc.waterloo.h2oloobots.TelemetryControl;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Disabled
+//@Disabled
 @TeleOp
-public class EncoderTest extends H2OLooTeleOp {
+public class EncoderTest extends OpMode {
 
+    TelemetryControl telemetryControl;
+    DriveTrain driveTrain;
     @Override
-    public void opModeInit() {
+    public void init() {
+
+        telemetryControl = new TelemetryControl(telemetry);
+        driveTrain = new DriveTrain(hardwareMap, telemetryControl, DcMotor.ZeroPowerBehavior.FLOAT);
 
     }
 
     @Override
-    public void opModePeriodic() {
+    public void loop() {
 
-        driveTrain.driveEncoderRawTelemetry();
+        telemetryControl.addData("Front Left Position", driveTrain.fl.getCurrentPosition());
+        telemetryControl.addData("Front Right Position", driveTrain.fr.getCurrentPosition());
+        telemetryControl.addData("Back Left Position", driveTrain.bl.getCurrentPosition());
+        telemetryControl.addData("Back Right Position", driveTrain.br.getCurrentPosition());
+        telemetryControl.update();
 
     }
 
