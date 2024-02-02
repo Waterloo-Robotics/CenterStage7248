@@ -136,6 +136,20 @@ public class AttachmentControl {
 
     }
 
+    public void setExtendArmMotorEncoder() {
+
+        if ((extendTouch.isPressed() && extendArmMotor.getCurrentPosition() > -100 && extendArmMotor.getTargetPosition() > -75)) {
+
+            rotateArmMotor.setPower(0);
+
+        } else {
+
+            rotateArmMotor.setPower(1);
+
+        }
+
+    }
+
     public void clawPickupManual() {
 
         if (gamepad2.dpad_up) {
@@ -285,9 +299,9 @@ public class AttachmentControl {
         if (!firstStepCompleted) {
 
             extendArmMotor.setTargetPosition(0);
-            rotateArmMotor.setTargetPosition(500);
+            rotateArmMotor.setTargetPosition(800);
 
-            if ((rotateArmMotor.getCurrentPosition() < 550 && rotateArmMotor.getCurrentPosition() > 450) && (extendArmMotor.getCurrentPosition() < 100 && extendArmMotor.getCurrentPosition() > -100)) {
+            if ((rotateArmMotor.getCurrentPosition() < 900 && rotateArmMotor.getCurrentPosition() > 800) && (extendArmMotor.getCurrentPosition() < 100 && extendArmMotor.getCurrentPosition() > -100)) {
 
                 firstStepCompleted = true;
 
@@ -296,7 +310,7 @@ public class AttachmentControl {
         }
 
         this.setRotateArmMotorEncoder();
-        extendArmMotor.setPower(1);
+        this.setExtendArmMotorEncoder();
 
         telemetryControl.addData("Extend Arm Current Position", extendArmMotor.getCurrentPosition());
         telemetryControl.addData("Extend Arm Target Position", extendArmMotor.getTargetPosition());
