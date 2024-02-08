@@ -138,13 +138,13 @@ public class AttachmentControl {
 
     public void setExtendArmMotorEncoder() {
 
-        if ((extendTouch.isPressed() && extendArmMotor.getCurrentPosition() > -100 && extendArmMotor.getTargetPosition() > -75)) {
+        if ((extendTouch.isPressed() && extendArmMotor.getTargetPosition() > -75)) {
 
-            rotateArmMotor.setPower(0);
+            extendArmMotor.setPower(0);
 
         } else {
 
-            rotateArmMotor.setPower(1);
+            extendArmMotor.setPower(1);
 
         }
 
@@ -188,25 +188,25 @@ public class AttachmentControl {
 
             armPosition = ArmPosition.HIGH;
             clawRotate.setPosition(1);
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
         } else if (gamepad2.dpad_left || gamepad2.dpad_right) {
 
             armPosition = ArmPosition.MED;
             clawRotate.setPosition(1);
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
         } else if (gamepad2.dpad_down) {
 
             armPosition = ArmPosition.LOW;
             clawRotate.setPosition(1);
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
         } else if (gamepad2.b) {
 
             armPosition = ArmPosition.CARRY;
             clawRotate.setPosition(1);
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 550;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 900;
             clawPickupRight.setPosition(1);
             clawPickupLeft.setPosition(0);
 
@@ -214,14 +214,14 @@ public class AttachmentControl {
 
             armPosition = ArmPosition.PICKUP;
             clawRotate.setPosition(0);
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 550;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() < 900;
             clawPickupRight.setPosition(0);
             clawPickupLeft.setPosition(1);
 
         } else if (gamepad2.left_bumper) {
 
             armPosition = ArmPosition.HANG_UP;
-            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 450;
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 900;
             clawRotate.setPosition(1);
 
         } else if (gamepad2.right_bumper) {
@@ -301,7 +301,7 @@ public class AttachmentControl {
             extendArmMotor.setTargetPosition(0);
             rotateArmMotor.setTargetPosition(800);
 
-            if ((rotateArmMotor.getCurrentPosition() < 900 && rotateArmMotor.getCurrentPosition() > 800) && (extendArmMotor.getCurrentPosition() < 100 && extendArmMotor.getCurrentPosition() > -100)) {
+            if ((rotateArmMotor.getCurrentPosition() < 900 && rotateArmMotor.getCurrentPosition() > 700) && (extendArmMotor.getCurrentPosition() < 100 && extendArmMotor.getCurrentPosition() > -100)) {
 
                 firstStepCompleted = true;
 
