@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -37,6 +38,8 @@ public class DriveTrain {
     }
 
     DriveTrainType driveTrainType = DriveTrainType.MECANUM;
+
+    Gamepad gamepad1, gamepad2;
 
     // defines drive motors for a 4 wheel drive
     public DcMotor fl;
@@ -90,11 +93,15 @@ public class DriveTrain {
      * @param telemetryControl the TelemetryControl variable initialized in the runOpMode() void.
      * */
     public DriveTrain(HardwareMap hardwareMap,
-                      TelemetryControl telemetryControl
+                      TelemetryControl telemetryControl,
+                      Gamepad gamepad1,
+                      Gamepad gamepad2
     ) {
 
         this.hardwareMap = hardwareMap;
         this.telemetryControl = telemetryControl;
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
         this.FourMotorInit();
 
     }
@@ -106,11 +113,15 @@ public class DriveTrain {
     public DriveTrain(
             HardwareMap hardwareMap,
             TelemetryControl telemetryControl,
-            DcMotor.ZeroPowerBehavior zeroPowerBehavior
+            DcMotor.ZeroPowerBehavior zeroPowerBehavior,
+            Gamepad gamepad1,
+            Gamepad gamepad2
     ) {
 
         this.hardwareMap = hardwareMap;
         this.telemetryControl = telemetryControl;
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
         this.FourMotorInit(zeroPowerBehavior);
 
     }
@@ -275,7 +286,9 @@ public class DriveTrain {
 
             case MECANUM:
 
-                speedMul = 0.75;
+                if (gamepad1.right_bumper) speedMul = 0.3;
+                else speedMul = 1.0;
+
                 this.MecanumTeleOp(FBInput * speedMul, LRInput * speedMul, pivotInput * speedMul);
                 break;
 

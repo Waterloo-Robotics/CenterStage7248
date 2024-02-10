@@ -20,7 +20,7 @@ public abstract class H2OLooAuto extends LinearOpMode {
     public void runOpMode() {
 
         telemetryControl = new TelemetryControl(telemetry);
-        driveTrain = new DriveTrain(hardwareMap, telemetryControl);
+        driveTrain = new DriveTrain(hardwareMap, telemetryControl, gamepad1, gamepad2);
         clawPickupLeft = hardwareMap.servo.get("clawPickupLeft");
         clawPickupLeft.scaleRange(0.45, 0.63);
         clawPickupLeft.setPosition(0);

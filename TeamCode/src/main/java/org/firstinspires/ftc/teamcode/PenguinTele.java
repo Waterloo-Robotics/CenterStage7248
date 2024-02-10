@@ -89,7 +89,7 @@ public class PenguinTele extends H2OLooTeleOp {
         attachmentControl.hangServoTeleOp();
         attachmentControl.hangMotorManual();
         attachmentControl.armTeleOp();
-        attachmentControl.clawPickupTeleOp(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.a);
+        attachmentControl.clawPickupTeleOp(gamepad1.x, gamepad1.b, gamepad1.a);
 
     }
 

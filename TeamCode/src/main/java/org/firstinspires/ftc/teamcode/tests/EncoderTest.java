@@ -18,7 +18,7 @@ public class EncoderTest extends OpMode {
     public void init() {
 
         telemetryControl = new TelemetryControl(telemetry);
-        driveTrain = new DriveTrain(hardwareMap, telemetryControl, DcMotor.ZeroPowerBehavior.FLOAT);
+        driveTrain = new DriveTrain(hardwareMap, telemetryControl, DcMotor.ZeroPowerBehavior.FLOAT, gamepad1, gamepad2);
 
     }
 

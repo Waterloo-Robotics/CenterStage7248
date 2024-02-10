@@ -140,6 +140,9 @@ public class AttachmentControl {
 
         if ((extendTouch.isPressed() && extendArmMotor.getTargetPosition() > -75)) {
 
+            extendArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            extendArmMotor.setTargetPosition(0);
+            extendArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             extendArmMotor.setPower(0);
 
         } else {
@@ -246,16 +249,16 @@ public class AttachmentControl {
             case MED:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(4731);
-                    extendArmMotor.setTargetPosition(-2137);
+                    rotateArmMotor.setTargetPosition(4480); // original number 4731
+                    extendArmMotor.setTargetPosition(-1355); // original number -2137
                 }
                 break;
 
             case LOW:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(4900);
-                    extendArmMotor.setTargetPosition(-1225);
+                    rotateArmMotor.setTargetPosition(4828); // original number 4900
+                    extendArmMotor.setTargetPosition(-555); // original number -1255
                 }
                 break;
 
