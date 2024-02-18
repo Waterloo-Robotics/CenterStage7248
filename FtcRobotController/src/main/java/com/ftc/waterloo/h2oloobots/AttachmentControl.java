@@ -241,8 +241,8 @@ public class AttachmentControl {
             case HIGH:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(4391);
-                    extendArmMotor.setTargetPosition(-2683);
+                    rotateArmMotor.setTargetPosition(4208);
+                    extendArmMotor.setTargetPosition(-2645);
                 }
                 break;
 

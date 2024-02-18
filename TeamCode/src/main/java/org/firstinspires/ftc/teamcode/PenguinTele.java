@@ -24,7 +24,7 @@ public class PenguinTele extends H2OLooTeleOp {
     public void opModeInit() {
 
         driveTrain.setDriveTrainType(DriveTrain.DriveTrainType.MECANUM);
-        last_dpad = dPad.RIGHT;
+        last_dpad = dPad.UP;
 
     }
 
