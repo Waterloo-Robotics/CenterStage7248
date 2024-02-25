@@ -6,7 +6,7 @@ import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous (name = "Red Backstage Park D6")
+@Autonomous (name = "Red Backstage")
 public class RedBackstageParkD6 extends H2OLooAuto {
 
     CameraControl.PropLocation location;
@@ -44,12 +44,14 @@ public class RedBackstageParkD6 extends H2OLooAuto {
                 6. Strafe right 3" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -29, -50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 1);
-                driveTrain.EncoderAutoMecanumDrive(18, 0, 50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-9, 0, 0, 0.5, 1);
-                driveTrain.EncoderAutoMecanumDrive(0,3,0,0.5,1);
+                driveTrain.EncoderAutoMecanumDrive(0, -30, -55, 0.8, 2);
+                driveTrain.EncoderAutoMecanumDrive(0, 7, 0, 0.8, 1);
+                driveTrain.EncoderAutoMecanumDrive(10, 0, 0, 0.8, 1);
+                driveTrain.EncoderAutoMecanumDrive(0, 0, -118, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-32, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(18,0,0,0.5,2);
+                driveTrain.EncoderAutoMecanumDrive(0,6,0,0.5,1);
+
                 break;
             case CENTER:
                 /*
@@ -60,11 +62,12 @@ public class RedBackstageParkD6 extends H2OLooAuto {
                 5. Strafe right 6" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -33, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 7, 0, 0.5, 1);
+                driveTrain.EncoderAutoMecanumDrive(0, -32, 0, 0.8, 2);
+                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.8, 1);
+                driveTrain.EncoderAutoMecanumDrive(30, 0, 0, 0.8, 2);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-21, 0, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 6, 0, 0.5, 1);
+                driveTrain.EncoderAutoMecanumDrive(-8, 0, 0, 0.5, 1);
+                driveTrain.EncoderAutoMecanumDrive(18, 0, 0, 0.5, 2);
                 break;
             case RIGHT:
                 /*
@@ -76,12 +79,12 @@ public class RedBackstageParkD6 extends H2OLooAuto {
                 6. Strafe right 2" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -29, 50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 1);
-                driveTrain.EncoderAutoMecanumDrive(14, 0, -50, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(10, -26, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 5, 0, 0.8, 1);
                 driveTrain.EncoderAutoMecanumDrive(0, 0, 175, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-8, 0, 0, 0.5, 1);
-                driveTrain.EncoderAutoMecanumDrive(0,2,0,0.5,1);
+                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.8, 1);
+//                driveTrain.EncoderAutoMecanumDrive(-8, 0, 0, 0.5, 1);
+//                driveTrain.EncoderAutoMecanumDrive(0,2,0,0.5,1);
                 break;
             case NONE:
                 break;
@@ -113,24 +116,24 @@ public class RedBackstageParkD6 extends H2OLooAuto {
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -36, 0, 0.8, 3);//20
-                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -39, 0, 0.8, 3);//20
+                driveTrain.EncoderAutoMecanumDrive(-18, 0, 0, 0.8, 3);
                 break;
             case CENTER:
                 /*
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -30, 0, 0.8, 3);
-                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -31, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(-18, 0, 0, 0.8, 3);
                 break;
             case RIGHT:
                 /*
                 1. Strafe right x" (at 80% speed) to clear the backdrop.
                 2. Reverse straight to park in tile D6 (see Game Manual 2 Appendix B)
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -20, 0, 0.8, 3);//36
-                driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.8, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -22, 0, 0.8, 3);//36
+                driveTrain.EncoderAutoMecanumDrive(-18, 0, 0, 0.8, 3);
                 break;
             case NONE:
                 break;

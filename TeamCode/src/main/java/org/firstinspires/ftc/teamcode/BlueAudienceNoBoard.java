@@ -6,7 +6,7 @@ import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous (name = "Blue Audience No Board")
+@Autonomous (name = "Blue Audience")
 public class BlueAudienceNoBoard extends H2OLooAuto {
 
     CameraControl.PropLocation location;
@@ -45,12 +45,12 @@ public class BlueAudienceNoBoard extends H2OLooAuto {
                 6. Strafe right 36" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -28, -50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(18, 0, 45, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, -20, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-81, 0, 0, 0.5, 6);
-                driveTrain.EncoderAutoMecanumDrive(0,30,0,0.5,3);
+                driveTrain.EncoderAutoMecanumDrive(0, -28, -60, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 6, 0, 0.5, 1);
+                driveTrain.EncoderAutoMecanumDrive(28, 0, 58, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -10, 0, 0.5, 1);
+                driveTrain.EncoderAutoMecanumDrive(-87, 0, 0, 0.5, 6);
+                driveTrain.EncoderAutoMecanumDrive(0,32,0,0.5,2);
                 break;
             case CENTER:
                 /*
@@ -65,8 +65,8 @@ public class BlueAudienceNoBoard extends H2OLooAuto {
                 driveTrain.EncoderAutoMecanumDrive(0, -32, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.5, 3);
                 driveTrain.EncoderAutoMecanumDrive(16, 0, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, -25, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-86, 0, 0, 0.5, 6);
+                driveTrain.EncoderAutoMecanumDrive(0, -24, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-88, 0, 0, 0.5, 6);
                 driveTrain.EncoderAutoMecanumDrive(0, 27, 0, 0.5, 6);
                 break;
             case RIGHT:
@@ -79,13 +79,11 @@ public class BlueAudienceNoBoard extends H2OLooAuto {
                 6. Strafe right 2" to align to Left AprilTag
                 ## The robot is in position to score.
                  */
-                driveTrain.EncoderAutoMecanumDrive(0, -25, 50, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 6, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 0, 39, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-30, 0, 0, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(0, 0, -86, 0.5, 3);
-                driveTrain.EncoderAutoMecanumDrive(-68,0,0,0.5,6);
-                driveTrain.EncoderAutoMecanumDrive(0,22,0,0.5,3);
+                driveTrain.EncoderAutoMecanumDrive(9, -26, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, 22, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-66, 0, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(0, -35, 0, 0.5, 3);
+                driveTrain.EncoderAutoMecanumDrive(-12,0,0,0.5,1);
                 break;
             case NONE:
                 break;
@@ -102,7 +100,7 @@ public class BlueAudienceNoBoard extends H2OLooAuto {
         while (attachmentControl.extendArmMotor.isBusy() || attachmentControl.rotateArmMotor.isBusy());
         sleep(250);
         // Still need to move the robot backwards to land the claw onto the backdrop (slowly).
-        driveTrain.EncoderAutoMecanumDrive(-6, 0, 0, 0.2, 3);
+        driveTrain.EncoderAutoMecanumDrive(-4, 0, 0, 0.2, 3);
         // Still need to release the claw to drop the yellow pixel. Need to create separate function to open claw or add into scoreAuto.
         attachmentControl.dropYellowAuto();
         sleep(500);

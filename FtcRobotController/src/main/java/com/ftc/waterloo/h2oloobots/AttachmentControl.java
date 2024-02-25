@@ -24,17 +24,21 @@ public class AttachmentControl {
     public DcMotorEx rotateArmMotor;
     ElapsedTime extendTime = new ElapsedTime();
     boolean isExtendTimeStarted = true;
-    Servo clawRotate;
-    Servo clawPickupLeft, clawPickupRight;
+    public Servo clawRotate;
+    public Servo clawPickupLeft, clawPickupRight;
     Servo droneServo;
     boolean firstStepCompleted = true;
     boolean lastAButton = false, lastBButton = false, lastXButton = false;
     boolean isStartOfHang0 = true;
     ElapsedTime hangTime = new ElapsedTime();
+    ElapsedTime hangTime2 = new ElapsedTime();
     public enum ArmPosition {
         LOW,
+        LOW_Front,
         MED,
+        MED_Front,
         HIGH,
+        HIGH_Front,
         PICKUP,
         CARRY,
         HANG_UP,
@@ -50,6 +54,7 @@ public class AttachmentControl {
     boolean isGP2APressed = false;
 
     boolean isAPressed = false;
+    boolean isStartOfHang1 = false;
 
     TouchSensor bottomTouch, topTouch;
     TouchSensor extendTouch;
@@ -187,22 +192,44 @@ public class AttachmentControl {
         rotateArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rotateArmMotor.setTargetPositionTolerance(70);
 
-        if (gamepad2.dpad_up) {
-
+        /* Scoring moves are mainly done on the rear side of the robot (with claw facing down).
+        * Gamepad 2 D pad is used for 3 setpoints on the backdrop. Gamepad 2 left trigger is added
+        * to allow the same D pad to be used for front scoring 3 setpoints.
+        * Gamepad Trigger button returns range of value 0.0 to 1.0 as the trigger is pressed.*/
+        if (gamepad2.dpad_up && (gamepad2.left_trigger < 0.2)) {
+            //Only D-pad up is pressed. Left trigger is NOT pressed.
             armPosition = ArmPosition.HIGH;
             clawRotate.setPosition(1);
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
-        } else if (gamepad2.dpad_left || gamepad2.dpad_right) {
+        } else if (gamepad2.dpad_up && (gamepad2.left_trigger > 0.1)) {
+            //D-pad left and Left trigger are pressed.
+            armPosition = ArmPosition.HIGH_Front;
+            clawRotate.setPosition(0.26);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
+        } else if (gamepad2.dpad_left && (gamepad2.left_trigger < 0.2)) {
+            //Only D-pad left is pressed. Left trigger is NOT pressed.
             armPosition = ArmPosition.MED;
             clawRotate.setPosition(1);
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad2.dpad_left && (gamepad2.left_trigger > 0.1)) {
+            //D-pad left and Left trigger are pressed.
+            armPosition = ArmPosition.MED_Front;
+            clawRotate.setPosition(0.26);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
+        } else if (gamepad2.dpad_down && (gamepad2.left_trigger < 0.2)) {
+            //Only D-pad down is pressed. Left trigger is NOT pressed.
             armPosition = ArmPosition.LOW;
             clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
+
+        } else if (gamepad2.dpad_down && (gamepad2.left_trigger > 0.1)) {
+            //D-pad down and Left trigger are pressed.
+            armPosition = ArmPosition.LOW_Front;
+            clawRotate.setPosition(0.26);
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
         } else if (gamepad2.b) {
@@ -224,7 +251,11 @@ public class AttachmentControl {
         } else if (gamepad2.left_bumper) {
 
             armPosition = ArmPosition.HANG_UP;
+            hangTime2.reset(); // reset timer to start wait time for hook delivery servo to get to the arm.
+            hangServo.setPosition(0); // deliver hook to the arm.
+            while (hangTime2.seconds() < 1);
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 900;
+            //isStartOfHang1 = false;
             clawRotate.setPosition(1);
 
         } else if (gamepad2.right_bumper) {
@@ -246,19 +277,43 @@ public class AttachmentControl {
                 }
                 break;
 
+            case HIGH_Front:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(1368);
+                    extendArmMotor.setTargetPosition(-1100);
+                }
+                break;
+
             case MED:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(4480); // original number 4731
-                    extendArmMotor.setTargetPosition(-1355); // original number -2137
+                    rotateArmMotor.setTargetPosition(4480);
+                    extendArmMotor.setTargetPosition(-1355);
+                }
+                break;
+
+            case MED_Front:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(1368);
+                    extendArmMotor.setTargetPosition(-1100);
                 }
                 break;
 
             case LOW:
 
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(4828); // original number 4900
-                    extendArmMotor.setTargetPosition(-555); // original number -1255
+                    rotateArmMotor.setTargetPosition(4828);
+                    extendArmMotor.setTargetPosition(-555);
+                }
+                break;
+
+            case LOW_Front:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(1368);
+                    extendArmMotor.setTargetPosition(-1100);
                 }
                 break;
 
@@ -280,8 +335,22 @@ public class AttachmentControl {
 
             case HANG_UP:
                 if (firstStepCompleted) {
-                    rotateArmMotor.setTargetPosition(3163);
-                    extendArmMotor.setTargetPosition(-898);
+//                    if (!isStartOfHang1) {
+//
+//                        isStartOfHang1 = true;
+//                        hangTime2.reset();
+//
+//                    }
+//                    hangServo.setPosition(0);
+//
+//                    if (isStartOfHang1 && hangTime2.seconds() > 0.5) {
+//
+                        hangServo.setPosition(1);
+                        rotateArmMotor.setTargetPosition(3163);
+                        extendArmMotor.setTargetPosition(-898);
+
+//                    }
+
                 }
                 break;
 
@@ -453,6 +522,86 @@ public class AttachmentControl {
 
     }
 
+    public void clawPickupTest(boolean leftButton, boolean rightButton, boolean bothButton) {
+        telemetryControl.addData("claw pickup test",leftButton);
+
+            if (bothButton) {
+
+                if (!lastAButton) {
+
+                    if (clawPickupRight.getPosition() < 0.1 || clawPickupLeft.getPosition() > 0.9) {
+
+                        clawPickupRight.setPosition(1);
+                        clawPickupLeft.setPosition(0);
+
+                    } else {
+
+                        clawPickupRight.setPosition(0);
+                        clawPickupLeft.setPosition(1);
+
+                    }
+
+                }
+
+                lastAButton = true;
+
+            } else {
+
+                lastAButton = false;
+
+            }
+
+            if (rightButton) {
+
+                if (!lastBButton) {
+
+                    if (clawPickupRight.getPosition() == 0) {
+
+                        clawPickupRight.setPosition(1);
+
+                    } else {
+
+                        clawPickupRight.setPosition(0);
+
+                    }
+
+                }
+
+                lastBButton = true;
+
+            } else {
+
+                lastBButton = false;
+
+            }
+
+            if (leftButton) {
+
+                if (!lastXButton) {
+
+                    if (clawPickupLeft.getPosition() == 0) {
+
+                        clawPickupLeft.setPosition(1);
+
+                    } else {
+
+                        clawPickupLeft.setPosition(0);
+
+                    }
+
+                }
+
+                lastXButton = true;
+
+            } else {
+
+                lastXButton = false;
+
+            }
+
+    }
+
+
     public void clawRotateManual() {
 
         if (gamepad2.left_bumper) {
@@ -581,6 +730,16 @@ public class AttachmentControl {
         telemetryControl.addData("Bottom Touch", bottomTouch.isPressed());
         telemetryControl.addData("Top Touch", topTouch.isPressed());
         telemetryControl.addData("Extend Touch", extendTouch.isPressed());
+
+    }
+
+    void sleep(long milliseconds) {
+
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException var4) {
+            Thread.currentThread().interrupt();
+        }
 
     }
 
