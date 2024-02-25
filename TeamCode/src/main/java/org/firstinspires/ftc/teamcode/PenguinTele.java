@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 
-@TeleOp(name = "Madagas Tele", group = "!")
+@TeleOp(name = "Madagas Tele", group = "Main")
 public class PenguinTele extends H2OLooTeleOp {
 
     enum dPad{

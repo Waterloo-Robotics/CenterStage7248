@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 //@Disabled
-@TeleOp
+@TeleOp(name = "Test Encoders", group = "TEST")
 public class EncoderTest extends OpMode {
 
     TelemetryControl telemetryControl;

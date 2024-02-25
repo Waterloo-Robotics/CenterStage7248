@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //@Disabled
 //@Disabled
-@TeleOp
+@TeleOp(name = "Test Camera Only", group = "TEST")
 public class CameraTestWithoutDTOrAttachments extends OpMode {
 
     TelemetryControl telemetryControl;

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 //@Disabled
 @Config
-@TeleOp(name = "Testimg l a la", group = "!")
+@TeleOp(name = "Test Attachment", group = "TEST")
 public class AttachmentTest extends H2OLooTeleOp {
 
     public static int DESIRED_TAG_ID = 2;

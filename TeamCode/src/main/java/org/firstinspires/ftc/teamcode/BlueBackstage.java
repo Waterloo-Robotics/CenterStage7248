@@ -5,10 +5,9 @@ import com.ftc.waterloo.h2oloobots.CameraControl;
 import com.ftc.waterloo.h2oloobots.DriveTrain;
 import com.ftc.waterloo.h2oloobots.H2OLooAuto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous (name = "Blue Backstage")
-public class BlueBackstageParkC6 extends H2OLooAuto {
+@Autonomous (name = "Blue Backstage", group = "BLUE")
+public class BlueBackstage extends H2OLooAuto {
 
     CameraControl.PropLocation location;
 
@@ -35,55 +34,46 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
         switch (location) {
 
             // Webcam 2 (robot left side) is facing the prop with the purple pixel in the push slot.
+            // Review Appendix B of game manual 2 Appendix B (page 38) to find out playing field coordinates.
+            // Backdrop side will be at higher motor speed so it is quicker to complete tasks to avoid collision.
             case RIGHT:
-                /*
-                1. Perform a smooth/swing 50° CCW/right turn as the robot strafe left for 29" at 50% speed.
-                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
-                3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
-                4. Perform a point turn 100° CCW to align the camera to AprilTag or robot claw in front of the left AprilTag.
-                5. Drive/Reverse straight 19" to get the rear robot frame on the backstage park/score zone line.
-                6. Strafe right 4" to align to Right AprilTag
-                ## The robot is in position to score.
-                 */
+//                1. Reverse 2" to clear the rigging (just in case).
                 driveTrain.EncoderAutoMecanumDrive(-2, 0, 0, 0.8, 1);
+//                2. Perform a smooth/swing 50° CW/right turn as the robot strafe left for 32" at 80% speed. This drives pixel onto the spike mark.
                 driveTrain.EncoderAutoMecanumDrive(0, -32, 50, 0.8, 2);
+//                3. Strafe right 15" with 50°CCW turn to release/leave the purple pixel at the left spike mark with the rear facing the backboard.
                 driveTrain.EncoderAutoMecanumDrive(0, 15, -50, 0.8, 2);
+//                4. Strafe left 8" to line up robot roughly in the middle between the wingnuts holding the backdrop.
                 driveTrain.EncoderAutoMecanumDrive(0, -8, 0, 0.8, 1);
+//                5. Reverse 38" to hit and square the robot against the backdrop.
                 driveTrain.EncoderAutoMecanumDrive(-38, 0, 0, 0.4, 3);
+//                6. Drive forward 15" to provide space for the scoring arm.
                 driveTrain.EncoderAutoMecanumDrive(15, 0, 0, 0.5, 2);
+//                7. Strafe left 12" to align in front of RIGHT AprilTag.
                 driveTrain.EncoderAutoMecanumDrive(0, -12, 0, 0.5, 2);
+//                ## The robot is in position to score.
                 break;
             case CENTER:
-                /*
-                1. Strafe left 33" at 50% speed.
-                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
-                3. Drive/Reverse straight 23" to get the rear robot frame on the backstage park/score zone line.
-                ## The robot is in position to score.
-                 */
+//                1. Perform a diagonal strafe (3" reverse and 32" left) to clear the rigging and deliver the pixel.
                 driveTrain.EncoderAutoMecanumDrive(-3, -32, 0, 0.8, 3);
+//                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark. Robot is already aligned to CENTER AprilTag.
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.8, 1);
+//                3. Reverse 38" to hit and square the robot against the backdrop.
                 driveTrain.EncoderAutoMecanumDrive(-38, 0, 0, 0.4, 3);
+//                4. Drive forward 17" to provide space for the scoring arm.
                 driveTrain.EncoderAutoMecanumDrive(17, 0, 0, 0.5, 2);
-
+//                ## The robot is in position to score.
                 break;
             case LEFT:
-                /*
-                1. Reverse by 2" to ensure we clear the rigging while making the turns.
-                2. Perform a smooth/swing 50° CW/right turn as the robot strafe left for 29" at 50% speed.
-                2. Strafe right 3" (at 50% speed) to release/leave the purple pixel at the left spike mark.
-                3. Perform a smooth/swing 50° CW turn while driving forward for 18" @ 50% speed.
-                4. Perform a point turn 175° CW to align the camera to AprilTag or robot claw in front of the left AprilTag.
-                5. Drive/Reverse straight 8" to get the rear robot frame on the backstage park/score zone line.
-                6. Strafe right 2" to align to Left AprilTag
-                ## The robot is in position to score.
-                 */
+//                1. Reverse 2" to clear the rigging (just in case).
                 driveTrain.EncoderAutoMecanumDrive(-2, 0, 0, 0.8, 1);
+//                2. Perform a diagonal strafe (12" reverse and 26" left) to deliver the pixel.
                 driveTrain.EncoderAutoMecanumDrive(-12, -26, 0, 0.8, 2);
+//                3. Strafe right 3" to align to LEFT AprilTag
                 driveTrain.EncoderAutoMecanumDrive(0, 3, 0, 0.8, 1);
+//                4. Reverse 10" to get to the scoring zone prep position.
                 driveTrain.EncoderAutoMecanumDrive(-10, 0, 0, 0.5, 1);
-//                driveTrain.EncoderAutoMecanumDrive(-14, 0, 48, 0.5, 3);
-//                driveTrain.EncoderAutoMecanumDrive(-8, 0, 0, 0.5, 1);
-//                driveTrain.EncoderAutoMecanumDrive(0,-9,0,0.5,1);
+//                ## The robot is in position to score.
                 break;
             case NONE:
                 break;
@@ -109,6 +99,7 @@ public class BlueBackstageParkC6 extends H2OLooAuto {
 
         /*
         Parking path case statements.
+        Objective is to park in A6 zone.
          */
         switch (location) {
             case RIGHT:
