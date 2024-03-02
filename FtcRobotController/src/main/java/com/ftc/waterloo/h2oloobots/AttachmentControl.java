@@ -37,6 +37,8 @@ public class AttachmentControl {
         LOW_Front,
         MED,
         MED_Front,
+        HIGHMED,
+        HIGHMED_Front,
         HIGH,
         HIGH_Front,
         PICKUP,
@@ -208,6 +210,18 @@ public class AttachmentControl {
             clawRotate.setPosition(0.26);
             firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
 
+        } else if (gamepad2.dpad_right && (gamepad2.left_trigger < 0.2)) {
+            //Only D-pad left is pressed. Left trigger is NOT pressed.
+            armPosition = ArmPosition.HIGHMED;
+            clawRotate.setPosition(1);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
+
+        } else if (gamepad2.dpad_right && (gamepad2.left_trigger > 0.1)) {
+            //Only D-pad left is pressed. Left trigger is NOT pressed.
+            armPosition = ArmPosition.HIGHMED_Front;
+            clawRotate.setPosition(0.26);
+            firstStepCompleted = rotateArmMotor.getCurrentPosition() > 700;
+
         } else if (gamepad2.dpad_left && (gamepad2.left_trigger < 0.2)) {
             //Only D-pad left is pressed. Left trigger is NOT pressed.
             armPosition = ArmPosition.MED;
@@ -290,6 +304,14 @@ public class AttachmentControl {
                 if (firstStepCompleted) {
                     rotateArmMotor.setTargetPosition(4480);
                     extendArmMotor.setTargetPosition(-1355);
+                }
+                break;
+
+            case HIGHMED:
+
+                if (firstStepCompleted) {
+                    rotateArmMotor.setTargetPosition(4344);
+                    extendArmMotor.setTargetPosition(-2000);
                 }
                 break;
 
